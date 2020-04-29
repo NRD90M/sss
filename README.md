@@ -8,26 +8,3 @@
 更有免下载券下载百度会员文档、自动选课的黑科技。<br>
 
 
-## 应用截图
-
-### 首页与教务页面
-<br>
-<div align="center">
-  <img height="700px" src="https://github.com/SunAlwaysOnline/Sukeda/blob/master/screenshot/%E9%A6%96%E9%A1%B5.jpg"/>
-  <img height="700px" src="https://github.com/SunAlwaysOnline/Sukeda/blob/master/screenshot/%E6%95%99%E5%8A%A1%E9%A1%B5%E9%9D%A2.jpg"/>
-</div>
-
-
-### 新闻页面与成绩查询
-<br>
-<div align="center">
-  <img height="700px" src="https://github.com/SunAlwaysOnline/Sukeda/blob/master/screenshot/%E6%96%B0%E9%97%BB%E9%A1%B5%E9%9D%A2.jpg"/>
-  <img height="700px" src="https://github.com/SunAlwaysOnline/Sukeda/blob/master/screenshot/%E6%9F%A5%E8%AF%A2%E6%88%90%E7%BB%A9.jpg"/>
-</div>
-
-<br>
-
-### <a href="https://github.com/SunAlwaysOnline/Sukeda/tree/master/screenshot">更多截图</a>
-
-
-### <a href="https://blog.csdn.net/qq_33591903">欢迎关注个人博客</a>
