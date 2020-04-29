@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.wfj.bmobstudy">
+
+    <!-- 基础数据交互所需的权限 -->
+    <!-- 允许联网 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 获取GSM（2g）、WCDMA（联通3g）等网络状态的信息 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 获取wifi网络状态的信息 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 获取sd卡写的权限，用于文件上传和下载 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 获取sd卡读的权限，用于读取照片 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 允许读取手机状态 用于创建BmobInstallation -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- 推送所需的权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!--高德网络定位需要-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!--A-GPS 模块-->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+    <!--location 权限-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:name=".Activity.MyApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/xiaohui"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/xiaohui"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".Activity.ChackActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- TODO 集成：1.2、添加推送所需要的服务和广播 -->
+        <service
+            android:name="cn.bmob.push.lib.service.PushService"
+            android:exported="true"
+            android:label="PushService"
+            android:process=":bmobpush">
+            <intent-filter>
+                <action android:name="cn.bmob.push.lib.service.PushService" />
+            </intent-filter>
+        </service>
+
+        <!-- 用于进程保活 -->
+        <service
+            android:name="cn.bmob.push.lib.service.PushNotifyService"
+            android:process=":bmobpush" />
+
+        <receiver android:name="cn.bmob.push.PushReceiver">
+            <intent-filter>
+
+                <!-- 系统启动完成后会调用 -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <!-- 解锁完成后会调用 -->
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <!-- 监听网络连通性 -->
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 第3步中创建的消息接收器，在这里进行注册 -->
+        <receiver android:name="com.wfj.bmobstudy.Receiver.PushReceiver">
+            <intent-filter>
+                <action android:name="cn.bmob.push.action.MESSAGE" />
+            </intent-filter>
+        </receiver>
+        <!-- 接收心跳和唤醒的广播，要和PushService运行在同个进程 -->
+        <receiver
+            android:name="cn.bmob.push.PushNotifyReceiver"
+            android:process=":bmobpush">
+            <intent-filter>
+
+                <!-- 接收心跳广播的action -->
+                <action android:name="cn.bmob.push.action.HEARTBEAT" />
+                <!-- 接收唤醒广播的action -->
+                <action android:name="cn.bmob.push.action.NOTIFY" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.wfj.bmobstudy.Activity.MainActivity"
+            android:launchMode="singleTask"
+            android:label="MainActivity"/>
+        <activity android:name="com.wfj.bmobstudy.Activity.AoLanActivity"
+            android:label="奥蓝系统"/>
+        <activity android:name="com.wfj.bmobstudy.Activity.NewsInfoActivity"
+            android:label="新闻"/>
+        <activity
+            android:name="com.wfj.bmobstudy.Activity.LibraryActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:label="图书馆"/>
+        <activity android:name="com.wfj.bmobstudy.Activity.NewsInformListActivity"
+            android:label="交流"/>
+        <activity android:name=".Fragment.activity.brInUsActivity"
+            android:label="校园概况"/>
+        <activity android:name=".Fragment.Entry.EntryCategoryActivity"
+            android:label="校园词条"/>
+        <activity android:name=".Fragment.SetMidFragment.CardActivity"
+            android:label="校园卡"/>
+        <activity android:name=".Fragment.SetMidFragment.GradeActivity"
+            android:label="成绩查询"/>
+        <activity android:name=".Fragment.SetMidFragment.KwxfActiviy"
+            android:label="学分查询"/>
+        <activity android:name=".Fragment.SetMidFragment.SmallUtilActivity"
+            android:label="小工具"/>
+        <activity android:name=".Fragment.SetMidFragment.PhoneActivity"
+            android:label="办公电话"/>
+        <activity android:name=".Fragment.Volunteer.VolunteerLoginActivity"
+            android:label="志愿者时间"/>
+       <!-- <activity android:name=".Activity.ChackActivity"
+            android:label="语音聊天"/>-->
+    </application>
+
+</manifest>
