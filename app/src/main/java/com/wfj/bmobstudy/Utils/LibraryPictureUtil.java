@@ -1,5 +1,14 @@
 package com.wfj.bmobstudy.Utils;
 
+import com.wfj.bmobstudy.Bean.SlideShow;
+import com.wfj.bmobstudy.Constant.UstsValue;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,43 +18,77 @@ import java.util.List;
  * @author: a */
 public class LibraryPictureUtil {
     public static int choose = 1;
+    public static List<SlideShow> libraryShowsList;
+
+    public static List<String> title ;
+    public static List<String> url;
+
+    public static void get_library_pic_info(final CallBackListener listener){
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    Document document = Jsoup.connect(UstsValue.library_website).timeout(5000).get();
+                    Elements elements = document.getElementsByAttributeValue("class", "bd");
+                    Elements elements0 = elements.get(0).select("ul").select("li").select("a");
+                    libraryShowsList = new ArrayList<SlideShow>();
+
+//                    title = new ArrayList<>();
+                    for (Element element:elements0){
+                        String title = element.attr("title");
+                        String img_url = element.select("img").attr("src");
+                        String detail_url = element.attr("href");
+
+                        SlideShow slideShowLibrary = new SlideShow();
+                        slideShowLibrary.setTitle(title);
+                        slideShowLibrary.setDetail_url(UstsValue.library_website+detail_url);
+                        slideShowLibrary.setImg_url(UstsValue.library_website+img_url);//拼接url
+
+                        libraryShowsList.add(slideShowLibrary);
+                    }
+
+                    listener.onSuccess(libraryShowsList);
+
+                }catch (IOException e) {
+                    e.printStackTrace();
+                    listener.onFailure(e);
+                }
+            }
+        }).start();
+
+    }
 
     public static List<String> get_library_pic_title() {
-        List<String> title = new ArrayList<>();
-        title.add("图书馆");
-        title.add("电子阅览室");
-        title.add("石湖讲坛");
-        //title.add("图书馆美景01");
-        title.add("图书馆美景01");
-        //title.add("图书馆美景02");
-        title.add("图书馆美景02");
-        title.add("图书馆美景03");
-        //title.add("图书馆美景06");
-        title.add("图书馆美景04");
-        title.add("图书馆美景05");
-        //title.add("图书馆美景09");
-        //title.add("图书馆美景10");
-        title.add("一楼大厅");
-        title.add("进门门禁");
-        title.add("总服务台");
-        title.add("自助借还机");
-        title.add("自助查询机");
-        title.add("借阅图书室");
-        //title.add("借阅图书室之二");
-        //title.add("借阅图书室之三");
-        title.add("自习室");
-        title.add("研修室");
-        title.add("二楼自习大厅");
-        title.add("二楼大厅");
-        title.add("期刊阅览室");
-        title.add("特藏室");
-        //title.add("特藏室02");
-        //title.add("特藏室02");
-        //title.add("特藏室03");
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    Document document = Jsoup.connect(UstsValue.official_jl).timeout(5000).get();
+                    Elements elements = document.getElementsByAttributeValue("class", "bd");
+                    Elements elements0 = elements.get(0).select("ul").select("li").select("a");
+
+                    for (Element element:elements0){
+                        title.add(element.attr("href"));
+
+                        url.add(element.select("img").attr("src"));
+                    }
+
+                }catch (Exception e){}
+            }
+        });
+
 
         return title;
     }
 
+    public static List<String> get_library_picture_url() {
+        if (choose == 0) {
+            return get_library_pic_url_dim();
+        } else {
+            return get_library_pic_url_clear();
+        }
+
+    }
     public static List<String> get_library_pic_url_dim() {
         List<String> url = new ArrayList<>();
         url.add("http://library.usts.edu.cn/?q=sites/default/files/imagecache/Slideshow/088.jpg");
@@ -117,15 +160,5 @@ public class LibraryPictureUtil {
 
         return url;
     }
-
-    public static List<String> get_library_picture_url() {
-        if (choose == 0) {
-            return get_library_pic_url_dim();
-        } else {
-            return get_library_pic_url_clear();
-        }
-
-    }
-
 
 }

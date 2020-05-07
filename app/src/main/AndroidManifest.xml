@@ -45,7 +45,7 @@
         android:roundIcon="@drawable/xiaohui"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Activity.ChackActivity">
+        <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -129,8 +129,8 @@
             android:label="办公电话"/>
         <activity android:name=".Fragment.Volunteer.VolunteerLoginActivity"
             android:label="志愿者时间"/>
-       <!-- <activity android:name=".Activity.ChackActivity"
-            android:label="语音聊天"/>-->
+        <activity android:name=".Activity.ChackActivity"
+            android:label="语音聊天"/>
     </application>
 
 </manifest>

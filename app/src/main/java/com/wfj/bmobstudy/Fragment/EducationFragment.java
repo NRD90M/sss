@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @description 学习界面
+ * @description 教务界面
  * @date: 2020/4/26
  * @author: a */
 public class EducationFragment extends Fragment {

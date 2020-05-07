@@ -11,7 +11,7 @@ import com.wfj.bmobstudy.Fragment.SetMinFragment.BrInUsItemFragment;
  * @date: 2020/4/26
  * @author: a */
 public class BrInUsPagerAdapter extends FragmentPagerAdapter {
-    private String[] title = {"学校简介", "校区介绍", "现任领导", "校歌校徽","历史沿革","办学条件","文化传统","知名校友"};
+    private String[] title = {"学院简介", "现任领导", "历任领导","师资队伍","院徽院训","学院风貌"};
 
     public BrInUsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -22,29 +22,29 @@ public class BrInUsPagerAdapter extends FragmentPagerAdapter {
         BrInUsItemFragment fragment = null;
         switch (position) {
             case 0:
-                fragment = BrInUsItemFragment.newInstance("file:///android_asset/brinus1.html");
+                fragment = BrInUsItemFragment.newInstance("file:///android_asset/brinus1.html");//学院简介
                 break;
             case 1:
-                fragment = BrInUsItemFragment.newInstance("file:///android_asset/brinus2.html");
+                fragment = BrInUsItemFragment.newInstance("file:///android_asset/brinus2.html");//现任领导
                 break;
             case 2:
-                fragment = BrInUsItemFragment.newInstance("file:///android_asset/brinus3.html");
+                fragment = BrInUsItemFragment.newInstance("file:///android_asset/brinus3.html");//历任领导
                 break;
             case 3:
-                fragment = BrInUsItemFragment.newInstance("file:///android_asset/brinus4.html");
+                fragment = BrInUsItemFragment.newInstance("file:///android_asset/brinus4.html");//师资队伍
                 break;
             case 4:
-                fragment = BrInUsItemFragment.newInstance("file:///android_asset/history.html");
+                fragment = BrInUsItemFragment.newInstance("file:///android_asset/brinus5.html");//院徽院训
                 break;
+//            case 5:
+//                fragment = BrInUsItemFragment.newInstance("file:///android_asset/runschool.html");
+//                break;
             case 5:
-                fragment = BrInUsItemFragment.newInstance("file:///android_asset/runschool.html");
+                fragment = BrInUsItemFragment.newInstance("file:///android_asset/culture.html");//学院风貌
                 break;
-            case 6:
-                fragment = BrInUsItemFragment.newInstance("file:///android_asset/culture.html");
-                break;
-            case 7:
-                fragment = BrInUsItemFragment.newInstance("file:///android_asset/alumnus.html");
-                break;
+//            case 7:
+//                fragment = BrInUsItemFragment.newInstance("file:///android_asset/alumnus.html");
+//                break;
 
 
         }

@@ -33,6 +33,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.Date;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -46,7 +47,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * @description 描述一下方法的作用
+ * @description 验证学生身份界面
  * @date: 2020/4/26
  * @author: a */
 public class StudentVerifyFragment extends Fragment {
@@ -82,11 +83,11 @@ public class StudentVerifyFragment extends Fragment {
         et_stu_id = (EditText) v.findViewById(R.id.et_stu_id);
         et_stu_pd = (EditText) v.findViewById(R.id.et_stu_pd);
         IsEmptyUtils.judeg_is_null(tv_info, "st_id", "验证学生身份", "修改已验证的学生身份", et_stu_id);
-        et_code = (EditText) v.findViewById(R.id.et_code);
-        iv_code = (ImageView) v.findViewById(R.id.iv_code);
-        btn_get_code = (Button) v.findViewById(R.id.btn_get_code);
+        et_code = (EditText) v.findViewById(R.id.et_code);//写入的验证码
+        iv_code = (ImageView) v.findViewById(R.id.iv_code);//显示的验证码
+        btn_get_code = (Button) v.findViewById(R.id.btn_get_code);//获取验证码按钮
         btn_get_code.setOnClickListener(new getCodeOnClickListener());
-        btn_verify = (Button) v.findViewById(R.id.btn_verify);
+        btn_verify = (Button) v.findViewById(R.id.btn_verify);//验证按钮
         btn_verify.setOnClickListener(new LoginOnClickListener());
 
 
@@ -126,10 +127,12 @@ public class StudentVerifyFragment extends Fragment {
 
             public void onResponse(Call call, Response response) throws IOException {
                 //提取随机的字符串的值
-                String url_string = response.request().url().toString();
-                String a = url_string.split("\\(")[1];
-                String b = a.split("\\)")[0];
-                random_string = b;
+                Date dt = new Date();
+                String url_string = response.request().url().toString()+"?t="+dt.getSeconds();
+
+//                String a = url_string.split("\\(")[1];
+//                String b = a.split("\\)")[0];
+                random_string = url_string;
                 getVerifCode();
             }
         });
@@ -140,7 +143,7 @@ public class StudentVerifyFragment extends Fragment {
      * 获取验证码
      */
     private void getVerifCode() {
-        String code_url = "http://jw.usts.edu.cn/(" + random_string + ")/CheckCode.aspx";
+        String code_url = random_string;
         HttpUtils.sendGetRequest(code_url, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -166,25 +169,34 @@ public class StudentVerifyFragment extends Fragment {
      * 尝试登录
      */
     private void login(final String name, final String pwd, String code) {
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pwd) || TextUtils.isEmpty(code)) {
-            Toast.show(getActivity(), "列表项不能为空!", 1);
-            return;
-        }
+//        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(pwd) || TextUtils.isEmpty(code)) {
+//            Toast.show(getActivity(), "列表项不能为空!", 1);
+//            return;
+//        }
         ShowDialogUtil.showProgressDialog(getActivity(), "正在验证...");
         RequestBody body = new FormBody.Builder()
-                .add("__VIEWSTATE", "dDwxNTMxMDk5Mzc0Ozs+8SKE1eIxEXhQ+rQzyLaGuxFtQgA=")
-                .add("__VIEWSTATEGENERATOR", "92719903")
-                .add("Button1", "")
-                .add("hidPdrs", "")
-                .add("hidsc", "")
-                .add("lbLanguage", "")
-                .add("RadioButtonList1", "%D1%A7%C9%FA")
-                .add("Textbox1", "")
-                .add("TextBox2", pwd)
-                .add("txtSecretCode", code)
-                .add("txtUserName", name)
+                .add("__VIEWSTATE", "/wEPDwULLTE0ODQyODIyNTBkZM6Do/HM9LKr0gOBzrM9ipj/wQ74Nn/AtoZflBbl7AUN")
+                .add("__VIEWSTATEGENERATOR", "56911C19")
+                .add("__EVENTVALIDATION","/wEdAAJaXCKP/JV8ptIbXj6Bxq3NZ5IuKWa4Qm28BhxLxh2oFLnU/fLbvTaQmXeaLfYvSIkf9WpKFbKVGjVEdX1qeJgY")
+                .add("pcInfo","Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36undefined5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36 SN:NULL")
+                .add("txt_mm_expression","")
+                .add("txt_mm_length","")
+                .add("txt_mm_userzh","")
+                .add("typeName","学生")
+                .add("dsdsdsdsdxcxdfgfg","")
+                .add("fgfggfdgtyuuyyuuckjg","")
+
+//                .add("Button1", "")
+//                .add("hidPdrs", "")
+//                .add("hidsc", "")
+//                .add("lbLanguage", "")
+//                .add("RadioButtonList1", "%D1%A7%C9%FA")
+//                .add("Textbox1", "")
+                .add("txt_psasas", "smc231105?")//密码
+                .add("txt_sdertfgsadscxcadsads", code)//验证码
+                .add("txt_asmcdefsddsd", "08070116222")//账号
                 .build();
-        String login_url = "http://jw.usts.edu.cn/(" + random_string + ")/default2.aspx";
+        String login_url = "http://jw.asc.jx.cn/_data/login_home.aspx";
         HttpUtils.sendPostRequest(login_url, body, new okhttp3.Callback() {
 
             public void onFailure(Call call, IOException e) {
@@ -201,12 +213,12 @@ public class StudentVerifyFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String url = response.request().url().toString();
                 Log.e("tag", url);
-                UstsValue.login_success_url = url;
+                UstsValue.login_success_url = "http://jw.asc.jx.cn/MAINFRM.aspx";
                 //String id = url.substring(url.length() - 11, url.length());
-                UstsValue.login_success_main_html = response.body().string();
+                UstsValue.login_success_main_html = "http://jw.asc.jx.cn/MAINFRM.aspx";
                 Log.e("tag", "urlurlurl" + url);
                 Log.e("tag", "et_stu_id" + et_stu_id.getText().toString());
-                if (url.contains(et_stu_id.getText().toString().trim())) {
+//                if (url.contains(et_stu_id.getText().toString().trim())) {
                     User u = BmobUser.getCurrentUser(User.class);
                     String objectId = u.getObjectId();
                     Log.e("tagg", name + "    name");
@@ -229,18 +241,18 @@ public class StudentVerifyFragment extends Fragment {
                             }
                         }
                     });
-                } else {
-                    get_url_string();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ShowDialogUtil.closeProgressDialog();
-                            Toast.show(getActivity(), "验证失败！", 0);
-                            et_code.setText("");
-
-                        }
-                    });
-                }
+//                } else {
+//                    get_url_string();
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            ShowDialogUtil.closeProgressDialog();
+//                            Toast.show(getActivity(), "验证失败！", 0);
+//                            et_code.setText("");
+//
+//                        }
+//                    });
+//                }
             }
         });
     }
@@ -249,11 +261,20 @@ public class StudentVerifyFragment extends Fragment {
      * 获取个人信息地址
      */
     private void get_info_url() {
-        Document document = Jsoup.parse(UstsValue.login_success_main_html);
-        Elements elements = document.select("a[href]");
+//        Document document = Jsoup.parse(UstsValue.login_success_main_html);
+//        Elements element1 = document.getElementsByAttributeValue("frame", "frmbody");
+        Document document = null;
+        try {
+            document = Jsoup.connect(UstsValue.login_success_main_html).timeout(5000).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Elements elements = document.select("td[value]");
         for (Element element : elements) {
-            if (element.text().equals("个人信息")) {
-                stu_info_url = "http://jw.usts.edu.cn/(" + random_string + ")/" + element.attr("href");
+            if (element.text().equals("基本信息")) {
+                stu_info_url = "http://jw.asc.jx.cn/ "+ element.attr("value");
+                Log.e("wenfujin", "get_info_url: "+stu_info_url );
             }
         }
         Log.e("tag", stu_info_url);

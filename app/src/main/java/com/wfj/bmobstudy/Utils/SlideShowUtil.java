@@ -26,42 +26,46 @@ public class SlideShowUtil {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    Document document = Jsoup.connect(UstsValue.official_website).timeout(5000).get();
-                    Elements elements = document.getElementsByAttributeValue("class", "banner");
-                    String big_url = "https://www.baidu.com/";
+                    Document document = Jsoup.connect(UstsValue.official_jl).timeout(5000).get();
+                    Elements elements = document.getElementsByAttributeValue("class", "bd");
+//                    Element element = document.select("div[class=vsb-box]").select("div[class = bd]").select("ul").select("li").select("src");
+//                    String big_url = "https://www.baidu.com/";
                     Log.d(TAG, "run:wenfujin "+elements);
 
 //                    for (Element e : elements) {
-                        Elements elements0 = elements.select("script[language]");
-//                        for (Element elements2 : elements0) {
-                            if (elements0.attr("language").equals("javascript1.1")) {
-                                big_url = elements0.attr("src");
-                            }
+                        Elements elements0 = elements.get(0).select("ul").select("li").select("img");
+//                        for (Element element1: elements0){
+//
 //                        }
-//                    }
-                    
-                    Document document1 = Jsoup.connect(big_url).timeout(6000).get();
-                    Elements elements1 = document1.getElementsByAttributeValue("class", "item");
-                    Elements element = elements1.select("img[alt]");
+////                        for (Element elements2 : elements0) {
+//                            if (elements0.attr("language").equals("javascript1.1")) {
+//                                big_url = elements0.attr("src");
+//                            }
+////                        }
+////                    }
+//
+//                    Document document1 = Jsoup.connect(big_url).timeout(6000).get();
+//                    Elements elements1 = document1.getElementsByAttributeValue("class", "item");
+//                    Elements element = elements1.select("img[alt]");
                     slideShowsList = new ArrayList<SlideShow>();
-                    for (Element element1 : element) {
-                        String title = element1.attr("alt");
+                    for (Element element1 : elements0) {
+                        String title = element1.attr("tit");
                         String img_url = element1.attr("src");
-                        //Log.e("a", img_url);
+                        Log.e("a", img_url);
                         SlideShow slideShow = new SlideShow();
                         slideShow.setTitle(title);
-                        slideShow.setImg_url(img_url);
+                        slideShow.setImg_url(UstsValue.official_jl+img_url);//拼接url
                         slideShowsList.add(slideShow);
                     }
-                    slideShowsList = removeSame(slideShowsList);
-                    Elements elements2 = elements1.select("a[title]");
-                    for (Element element1 : elements2) {
-                        for (int i = 0; i <= slideShowsList.size() - 1; i++) {
-                            if (slideShowsList.get(i).getTitle().equals(element1.attr("title"))) {
-                                slideShowsList.get(i).setDetail_url(element1.attr("href"));
-                            }
-                        }
-                    }
+//                    slideShowsList = removeSame(slideShowsList);
+//                    Elements elements2 = elements.select("a[title]");
+//                    for (Element element1 : elements2) {
+//                        for (int i = 0; i <= slideShowsList.size() - 1; i++) {
+//                            if (slideShowsList.get(i).getTitle().equals(element1.attr("title"))) {
+//                                slideShowsList.get(i).setDetail_url(element1.attr("href"));
+//                            }
+//                        }
+//                    }
                     listener.onSuccess(slideShowsList);
 
                 } catch (IOException e) {

@@ -24,7 +24,7 @@ public class EducationBannerUtil {
     //获取轮播图地址
     public static void get_banner_list(final get_bannerCall bannerCall) {
         Request request = new Request.Builder()
-                .url("http://jwch.usts.edu.cn/")
+                .url(url)
                 .build();
         client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override

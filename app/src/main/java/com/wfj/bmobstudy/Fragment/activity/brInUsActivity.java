@@ -12,6 +12,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.bumptech.glide.Glide;
 import com.wfj.bmobstudy.Activity.AppBaseActivity;
 import com.wfj.bmobstudy.Adapter.BrInUsPagerAdapter;
+import com.wfj.bmobstudy.Constant.UstsValue;
 import com.wfj.bmobstudy.R;
 import com.wfj.bmobstudy.Utils.ShowOrHiddenUtil;
 
@@ -33,6 +34,7 @@ public class brInUsActivity extends AppBaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
+        initViews();
     }
 
     /**
@@ -55,7 +57,7 @@ public class brInUsActivity extends AppBaseActivity {
         tabs.setViewPager(vp);
 
         iv_brinus = (ImageView) findViewById(R.id.iv_brinus);
-        Glide.with(this).load("http://www.usts.edu.cn/static/images/ggtu1.jpg").centerCrop().into(iv_brinus);
+        Glide.with(this).load(UstsValue.official_jl+"__local/8/25/0E/0BD48AC7F022A1389998DD0C47A_8B9C4A64_F605.jpg").centerCrop().into(iv_brinus);
         tabs.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -63,19 +65,19 @@ public class brInUsActivity extends AppBaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                String url = "";
-                if (position <= 3) {
-                    url = "http://www.usts.edu.cn/static/images/ggtu" + (position + 1) + ".jpg";
-                } else if (position == 4) {
-                    url = "https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=2248b54a69061d95694b3f6a1a9d61b4/e4dde71190ef76c62ca637599a16fdfaaf516748.jpg";
-                } else if (position == 5) {
-                    url = "https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=fd6657c4ce177f3e0439f45f11a650a2/1c950a7b02087bf4267f929bf5d3572c11dfcf35.jpg";
-                } else if (position == 6) {
-                    url = "https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=a758f2d78a0a19d8df0e8c575293e9ee/2f738bd4b31c8701ca6c19802d7f9e2f0608fffa.jpg";
-                } else if (position == 7) {
-                    url = "https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=c0a0fcb1d0ca7bcb6976cf7ddf600006/b2de9c82d158ccbfde2f70481ed8bc3eb1354135.jpg";
-                }
-                Glide.with(context).load(url).centerCrop().into(iv_brinus);
+//                String url = "";
+//                if (position <= 3) {
+//                    url = "http://www.usts.edu.cn/static/images/ggtu" + (position + 1) + ".jpg";
+//                } else if (position == 4) {
+//                    url = "https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=2248b54a69061d95694b3f6a1a9d61b4/e4dde71190ef76c62ca637599a16fdfaaf516748.jpg";
+//                } else if (position == 5) {
+//                    url = "https://gss0.bdstatic.com/-4o3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=fd6657c4ce177f3e0439f45f11a650a2/1c950a7b02087bf4267f929bf5d3572c11dfcf35.jpg";
+//                } else if (position == 6) {
+//                    url = "https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=a758f2d78a0a19d8df0e8c575293e9ee/2f738bd4b31c8701ca6c19802d7f9e2f0608fffa.jpg";
+//                } else if (position == 7) {
+//                    url = "https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=c0a0fcb1d0ca7bcb6976cf7ddf600006/b2de9c82d158ccbfde2f70481ed8bc3eb1354135.jpg";
+//                }
+//                Glide.with(context).load(url).centerCrop().into(iv_brinus);
             }
 
             @Override

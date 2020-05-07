@@ -85,18 +85,7 @@ public class NewsInfoActivity extends AppBaseActivity {
         mWebSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         //mWebSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);android4.4之后无效
 
-        if (url.equals("http://news.usts.edu.cn/news/News_View.asp?newsid=2953")) {
-            //这个网页过于发杂，并不是单个新闻展示
-            Toast.show(NewsInfoActivity.this, "非具体新闻！", 0);
-            return;
-        }
-        //由于官网的设置，有些图片点击没有具体内容，在这里捕获异常
-        try {
-            get_html();
-        } catch (Exception e) {
-            Toast.show_info(NewsInfoActivity.this, "当前图片不包含新闻！");
-        }
-
+        get_html();
         //mWebSettings.setUseWideViewPort(true);
         //mWebSettings.setLoadWithOverviewMode(true);
         //mWebSettings.setTextSize(WebSettings.TextSize.LARGEST);
@@ -110,13 +99,13 @@ public class NewsInfoActivity extends AppBaseActivity {
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
 
-                if (url.startsWith("http://news")) {
+//                if (url.startsWith("http://news")) {
                     NewsReset.imgReset(mWebView);
                     Log.e("tag", "news");
 
-                } else {
-                    Log.e("tag", "notify");
-                }
+//                } else {
+//                    Log.e("tag", "notify");
+//                }
 
             }
         });
@@ -130,36 +119,36 @@ public class NewsInfoActivity extends AppBaseActivity {
             public void run() {
                 try {
                     Document document = Jsoup.connect(url).timeout(6000).get();
-                    int length = document.select("div[class=author]").size();
-                    final String title = document.select("div[class=title]").text();
-                    String un_date = "";
-                    if (length == 2) {
-                        un_date = document.select("div[class=author]").text().split("信")[0];
-                    } else {
-                        un_date = document.select("div[class=author]").text().split("发")[0];
-                    }
-                    final String date = un_date.substring(3, un_date.length() - 2);
-                    final String times = document.select("span[id=hits]").text();
-                    final Elements elements = document.select("div[class=content]");
-                    if (url.contains("http://news.usts.edu.cn/")) {
+//                    int length = document.select("div[class=main_content]").size();
+//                    final String title = document.select("div[class=main_contit]").text();
+//                    String un_date = "";
+//                    if (length == 2) {
+//                        un_date = document.select("div[class=main_content]").text().split("信")[0];
+//                    } else {
+//                        un_date = document.select("div[class=main_content]").select("p").text();
+//                    }
+//                    final String date = un_date.substring(0, 20);
+//                    final String times = document.select("span[id=hits]").text();
+                    final Elements elements = document.select("div[class=main_content]");
+//                    if (url.contains("http://news.usts.edu.cn/")) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mWebView.loadDataWithBaseURL("http://news.usts.edu.cn/", elements.toString(), "text/html", "utf-8", null);
+                                mWebView.loadDataWithBaseURL("http://tsg.asc.jx.cn/info/", elements.toString(), "text/html", "utf-8", null);
                             }
                         });
-                    } else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mWebSettings.setUseWideViewPort(true);
-                                mWebSettings.setLoadWithOverviewMode(true);
-                                // mWebSettings.setTextSize(WebSettings.TextSize.LARGEST);
-                                mWebSettings.setTextZoom(230);
-                                mWebView.loadDataWithBaseURL("http://notify.usts.edu.cn/", elements.toString(), "text/html", "utf-8", null);
-                            }
-                        });
-                    }
+//                    } else {
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                mWebSettings.setUseWideViewPort(true);
+//                                mWebSettings.setLoadWithOverviewMode(true);
+//                                // mWebSettings.setTextSize(WebSettings.TextSize.LARGEST);
+//                                mWebSettings.setTextZoom(230);
+//                                mWebView.loadDataWithBaseURL("http://notify.usts.edu.cn/", elements.toString(), "text/html", "utf-8", null);
+//                            }
+//                        });
+//                    }
 
 
                     // final String title = document.select("div[class=title]").text();
@@ -168,14 +157,14 @@ public class NewsInfoActivity extends AppBaseActivity {
                     // //String init_times = document.select("div[class=author]").eq(1).text();
                     // String un_times = init_times.split("编")[0];
                     // final String times = un_times.substring(0, un_times.length() - 1);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            tv_title.setText("" + title);
-                            tv_date.setText("" + date);
-                            tv_click_rate.setText("浏览次数 : " + times);
-                        }
-                    });
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            tv_title.setText("" + title);
+//                            tv_date.setText("" + date);
+//                            tv_click_rate.setText("浏览次数 : " + times);
+//                        }
+//                    });
                 } catch (Exception e) {
                     Toast.show_info(NewsInfoActivity.this, "当前图片不包含新闻！");
                 }
