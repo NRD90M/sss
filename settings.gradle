@@ -1,1 +1,1 @@
-include ':app', ':chatsdk1'
+include ':app', ':robot','library'

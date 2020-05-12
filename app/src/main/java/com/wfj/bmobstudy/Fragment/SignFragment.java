@@ -17,6 +17,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.jju.howe.howeassistant.activity.RobotMainActivity;
 import com.wfj.bmobstudy.Activity.AoLanActivity;
 import com.wfj.bmobstudy.Activity.AppBaseActivity;
 import com.wfj.bmobstudy.Activity.LibraryActivity;
@@ -69,7 +70,7 @@ public class SignFragment extends Fragment  {
             "小工具",
             "志愿者时间",
             "办公电话",
-            "苏科词条"
+            "江理词条"
     };
     private GridView gridView;
 
@@ -193,7 +194,7 @@ public class SignFragment extends Fragment  {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0://学校概况
-                        myStartActivity(getActivity(),brInUsActivity.class);
+                        myStartActivity(getActivity(), brInUsActivity.class);
 //                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fl_content,brInUsFragment).addToBackStack(null).commit();
                         break;
                     case 1://一卡通
@@ -220,11 +221,11 @@ public class SignFragment extends Fragment  {
                     case 8:// 办公电话
                         myStartActivity(getActivity(),PhoneActivity.class);
                         break;
-                    case 9://苏科词条
+                    case 9://江理词条
                         if (FunctionStateUtil.Entry) {
                             myStartActivity(getActivity(),EntryCategoryActivity.class);
                         } else {
-                            RxToast.info("苏科词条正在调整中！");
+                            RxToast.info("江理词条正在调整中！");
                         }
                         break;
 

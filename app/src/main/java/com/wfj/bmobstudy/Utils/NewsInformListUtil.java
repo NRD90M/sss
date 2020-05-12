@@ -37,7 +37,7 @@ public class NewsInformListUtil {
 
 
     /**
-     * 获取苏科要闻前五条中有图片的新闻，校园快讯前五条中有图片的快讯
+     * 获取江理要闻前五条中有图片的新闻，校园快讯前五条中有图片的快讯
      * 获取两者的列表
      */
     public static void get_news_inform_pic_url(two_categories_listCall listCall) {

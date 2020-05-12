@@ -146,7 +146,7 @@ public class NewsInformListActivity extends AppBaseActivity {
 
     private void initGridView() {
         gridView = (GridView) findViewById(R.id.gv_news_inform_list);
-        String text[] = {"苏科要闻", "通知公告", "学术动态", "校园快讯"};
+        String text[] = {"江理要闻", "通知公告", "学术动态", "校园快讯"};
         ArrayList<HashMap<String, Object>> arrayList = new ArrayList<HashMap<String, Object>>();
         HashMap<String, Object> map = new HashMap<>();
         map.put("image", getObject("important"));
