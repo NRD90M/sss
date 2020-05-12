@@ -1,0 +1,2 @@
+cn.droidlover.xrichtext
+string app_name

@@ -8,13 +8,20 @@ public class UstsValue {
     /**
      * 官网主页地址
      */
+    public static final String official_jl = "http://www.asc.jx.cn/";
     public static final String official_website = "http://www.usts.edu.cn/";
+    /*
+    * 图书馆主页地址
+    * */
+    public static String library_website = "http://tsg.asc.jx.cn/";
 
     public static final String two_options = "http://jw.usts.edu.cn/";
     /**
      * 点击教务管理系统后出现的地址，302
      */
-    public static final String two_options_click = "http://jw.usts.edu.cn/default2.aspx";
+//    public static final String two_options_click = "http://jw.usts.edu.cn/default2.aspx";
+
+    public static final String two_options_click = "http://jw.asc.jx.cn/sys/ValidateCode.aspx";
 
     //public  String random_string;
 

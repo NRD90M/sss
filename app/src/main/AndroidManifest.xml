@@ -45,7 +45,7 @@
         android:roundIcon="@drawable/xiaohui"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Activity.ChackActivity">
+        <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -99,10 +99,10 @@
             </intent-filter>
         </receiver>
 
-        <activity
+       <!-- <activity
             android:name="com.wfj.bmobstudy.Activity.MainActivity"
             android:launchMode="singleTask"
-            android:label="MainActivity"/>
+            android:label="MainActivity"/>-->
         <activity android:name="com.wfj.bmobstudy.Activity.AoLanActivity"
             android:label="奥蓝系统"/>
         <activity android:name="com.wfj.bmobstudy.Activity.NewsInfoActivity"
@@ -129,8 +129,13 @@
             android:label="办公电话"/>
         <activity android:name=".Fragment.Volunteer.VolunteerLoginActivity"
             android:label="志愿者时间"/>
-       <!-- <activity android:name=".Activity.ChackActivity"
-            android:label="语音聊天"/>-->
+
+        <activity android:name=".Activity.VideoPlayActivity"
+            android:label="视频播放"/>
+        <activity android:name=".Activity.VideoListActivity"
+            android:label="视频信息"/>
+        <activity android:name=".Activity.ExercisesDetailActivity"
+            android:label="练习题目"/>
     </application>
 
 </manifest>

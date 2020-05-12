@@ -4,12 +4,11 @@ apply plugin: 'com.android.library'
 group = 'com.github.limedroid'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -23,6 +22,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.buyi.huxq17:serviceagency:1.1.0'
+
 }
 
 tasks.withType(JavaCompile) {

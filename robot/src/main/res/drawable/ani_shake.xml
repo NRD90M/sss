@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="true" >
+
+    <item
+        android:drawable="@drawable/robot_with_eye001"
+        android:duration="100">
+    </item>
+    <item
+        android:drawable="@drawable/robot_shake001"
+        android:duration="100">
+    </item>
+    <item
+        android:drawable="@drawable/robot_shake001"
+        android:duration="100"/>
+    <item
+        android:drawable="@drawable/robot_shake002"
+        android:duration="100"/>
+    <item
+        android:drawable="@drawable/robot_shake003"
+        android:duration="100"/>
+    <item
+        android:drawable="@drawable/robot_shake004"
+        android:duration="100"/>
+    <item
+        android:drawable="@drawable/robot_shake005"
+        android:duration="100"/>
+    <item
+        android:drawable="@drawable/robot_shake006"
+        android:duration="100"/>
+    <item
+        android:drawable="@drawable/robot_shake007"
+        android:duration="100"/>
+    <item
+        android:drawable="@drawable/robot_shake008"
+        android:duration="100"/>
+    <item
+        android:drawable="@drawable/robot_shake001"
+        android:duration="100">
+    </item>
+    <item
+        android:drawable="@drawable/robot_with_eye001"
+        android:duration="100">
+    </item>
+</animation-list>

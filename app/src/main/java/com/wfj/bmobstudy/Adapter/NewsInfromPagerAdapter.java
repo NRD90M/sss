@@ -11,7 +11,7 @@ import com.wfj.bmobstudy.Fragment.SetMidFragment.NewsInformFourFragment;
  * @date: 2020/4/26
  * @author: a */
 public class NewsInfromPagerAdapter extends FragmentPagerAdapter {
-    private String title[] = {"苏科要闻", "通知公告", "学术动态", "校园快讯"};
+    private String title[] = {"江理要闻", "通知公告", "学术动态", "校园快讯"};
 
     public NewsInfromPagerAdapter(FragmentManager fm) {
         super(fm);

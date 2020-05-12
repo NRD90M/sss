@@ -1,5 +1,6 @@
 package com.wfj.bmobstudy.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,17 +16,21 @@ import com.wfj.bmobstudy.Adapter.BookAdapter;
 import com.wfj.bmobstudy.Adapter.BookRecommendAdapter;
 import com.wfj.bmobstudy.Bean.Book;
 import com.wfj.bmobstudy.Bean.Book_recommend;
+import com.wfj.bmobstudy.Bean.SlideShow;
 import com.wfj.bmobstudy.Fragment.SetMidFragment.BookItemFragment;
 import com.wfj.bmobstudy.Fragment.SetMidFragment.LibraryInfoFragment;
 import com.wfj.bmobstudy.R;
 import com.wfj.bmobstudy.Utils.BookRecommendUtil;
 import com.wfj.bmobstudy.Utils.BookUtil;
+import com.wfj.bmobstudy.Utils.CallBackListener;
 import com.wfj.bmobstudy.Utils.GlideImageLoader;
 import com.wfj.bmobstudy.Utils.LibraryPictureUtil;
+import com.wfj.bmobstudy.Utils.Toast;
 import com.wfj.bmobstudy.View.MyGridView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,10 +50,10 @@ public class LibraryActivity extends AppBaseActivity {
     private int shown = 0;
     //显示的全部list集合
     private List<Book> all_book_list;
-
+    List<SlideShow> libraryShowsList;//轮播图
     private Banner banner;
     private STATE abl_state;
-
+    private Context context;
     //展开、折叠、中间
     private enum STATE {
         EXPANDED,
@@ -56,21 +61,20 @@ public class LibraryActivity extends AppBaseActivity {
         INTERNEDIATE
 
     }
-
     private AppBarLayout abl_library;
     private MyGridView gridView;
 
+    private LibraryInfoFragment fragment;
     //回退标记
     public static int i = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initBanner();
+        context = this;
         initViews();
-        initCollapsingToolBarlayout();
-        initGridView();
+        initCollapsingToolBarlayout();//处理界面折叠
+        initGridView();//初始化网格按钮
     }
 
     /**
@@ -83,14 +87,17 @@ public class LibraryActivity extends AppBaseActivity {
         return R.layout.activity_library;
     }
 
+    //初始化view
     private void initViews() {
-        ly_back = (LinearLayout) findViewById(R.id.ly_back);
-        ly_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+//        ly_back = (LinearLayout) findViewById(R.id.ly_back);
+//        ly_back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
+
+        getInfo_Banner();
         searchView = (SearchView) findViewById(R.id.sv);
         searchView.setSubmitButtonEnabled(true);
         recyclerView = (RecyclerView) findViewById(R.id.rv_book);
@@ -110,6 +117,25 @@ public class LibraryActivity extends AppBaseActivity {
             @Override
             public boolean onQueryTextChange(String s) {
                 return false;
+            }
+        });
+
+    }
+    //获取轮播图 信息
+    private void getInfo_Banner() {
+        LibraryPictureUtil.get_library_pic_info(new CallBackListener() {
+            @Override
+            public void onSuccess(List<SlideShow> list) {
+                libraryShowsList = new ArrayList<>();
+                libraryShowsList = LibraryPictureUtil.libraryShowsList;
+
+                initBanner();
+                Toast.show(context, "加载成功！", 1000);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
             }
         });
 
@@ -214,30 +240,51 @@ public class LibraryActivity extends AppBaseActivity {
     }
 
 
-    private void initBanner() {
-        banner = (Banner) findViewById(R.id.banner);
-        //设置banner样式
-        banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
-        //设置图片加载器
-        banner.setImageLoader(new GlideImageLoader());
-        //设置图片集合
-        List<String> title = LibraryPictureUtil.get_library_pic_title();
-        List<String> url = LibraryPictureUtil.get_library_picture_url();
+    public void initBanner() {
+       this.runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+              banner = (Banner) findViewById(R.id.banner);
+              //设置banner样式
+              banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
+              //设置图片加载器
+              banner.setImageLoader(new GlideImageLoader());
 
-        banner.setImages(url);
-        //设置banner动画效果
-        banner.setBannerAnimation(Transformer.Default);
-        //设置标题集合（当banner样式有显示title时）
-        banner.setBannerTitles(title);
-        //设置自动轮播，默认为true
-        banner.isAutoPlay(true);
-        //设置轮播时间
-        banner.setDelayTime(3000);
-        //设置指示器位置（当banner模式中有指示器时）
-        banner.setIndicatorGravity(BannerConfig.CENTER);
+              List<String> url = new ArrayList<>();
+              List<String> title = new ArrayList<>();
+              final List<String> detail_url = new ArrayList<>();
 
-        //banner设置方法全部调用完毕时最后调用
-        banner.start();
+              for (SlideShow slideShow : libraryShowsList) {
+                  url.add(slideShow.getImg_url());
+                  title.add(slideShow.getTitle());
+                  detail_url.add(slideShow.getDetail_url());
+              }
+              banner.setImages(url);
+              //设置banner动画效果
+              banner.setBannerAnimation(Transformer.Default);
+              //设置标题集合（当banner样式有显示title时）
+              banner.setBannerTitles(title);
+              //设置自动轮播，默认为true
+              banner.isAutoPlay(true);
+              //设置轮播时间
+              banner.setDelayTime(3000);
+              //设置指示器位置（当banner模式中有指示器时）
+              banner.setIndicatorGravity(BannerConfig.CENTER);
+              banner.setOnBannerListener(new OnBannerListener() {
+                  @Override
+                  public void OnBannerClick(int position) {
+                      //此时需要暂停轮播。否则返回时与当前点击的轮播页面不一致
+                      banner.stopAutoPlay();
+                      Intent i = new Intent(context, NewsInfoActivity.class);
+                      i.putExtra("url", detail_url.get(position));
+                      startActivity(i);
+                      overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                  }
+              });
+              //banner设置方法全部调用完毕时最后调用
+              banner.start();
+          }
+      });
 
 
     }
@@ -280,7 +327,7 @@ public class LibraryActivity extends AppBaseActivity {
 
     private void initGridView() {
         gridView = (MyGridView) findViewById(R.id.gv_library);
-        String text[] = {"图书馆简介", "开放时间", "馆藏布局", "规章制度", "联系我们", "热门推荐"};
+        String text[] = {"图书馆简介", "开放时间", "馆藏布局", "借阅指南", "机构联系", "热门推荐"};
         ArrayList<HashMap<String, Object>> arrayList = new ArrayList<HashMap<String, Object>>();
         HashMap<String, Object> map = new HashMap<>();
         map.put("image", getObject("library_general"));
@@ -320,7 +367,7 @@ public class LibraryActivity extends AppBaseActivity {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int postion, long id) {
-                LibraryInfoFragment fragment = new LibraryInfoFragment();
+                fragment = new LibraryInfoFragment();
                 Bundle b = new Bundle();
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
@@ -330,37 +377,37 @@ public class LibraryActivity extends AppBaseActivity {
                     setAblExpanded(false);
                 }
                 switch (postion) {
-                    case 0:
-                        String url = "http://library.usts.edu.cn/?q=node/1";
+                    case 0://图书馆概况
+                        String url = "http://tsg.asc.jx.cn/bggk/tsggk.htm";
                         b.putString("url", url);
                         fragment.setArguments(b);
                         transaction.commit();
                         break;
-                    case 1:
-                        String url1 = "http://library.usts.edu.cn/?q=node/3";
+                    case 1://开放时间
+                        String url1 = "http://tsg.asc.jx.cn/bggk/kfsj.htm";
                         b.putString("url", url1);
                         fragment.setArguments(b);
                         transaction.commit();
                         break;
-                    case 2:
-                        String url2 = "http://library.usts.edu.cn/?q=node/30";
+                    case 2://管内布局
+                        String url2 = "http://tsg.asc.jx.cn/gzzy/gzfb.htm";
                         b.putString("url", url2);
                         fragment.setArguments(b);
                         transaction.commit();
                         break;
-                    case 3:
-                        String url3 = "http://library.usts.edu.cn/?q=node/31";
+                    case 3://规章制度--借阅指南
+                        String url3 = "http://tsg.asc.jx.cn/fwzn/tsgjyzn.htm";
                         b.putString("url", url3);
                         fragment.setArguments(b);
                         transaction.commit();
                         break;
-                    case 4:
-                        String url4 = "http://library.usts.edu.cn/?q=node/85";
+                    case 4://联系我们
+                        String url4 = "http://tsg.asc.jx.cn/bggk/jgsz.htm";
                         b.putString("url", url4);
                         fragment.setArguments(b);
                         transaction.commit();
                         break;
-                    case 5:
+                    case 5://热门推荐--新书推荐
                         BookRecommendUtil.get_recommend_list(new BookRecommendUtil.call_categories() {
                             @Override
                             public void success(final List<String> list) {

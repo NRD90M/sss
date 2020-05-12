@@ -61,13 +61,12 @@ public class LibraryInfoFragment extends Fragment {
             public void run() {
                 try {
                     Document document = Jsoup.connect(url).timeout(6000).get();
-                    Elements elements = document.select("div[class=content]").eq(1);
-                    Elements elements1 = document.select("div[class=links]");
-                    final String html = elements.toString() + elements1.toString();
+                    Elements elements = document.select("div[class=main_conR]");
+//                    Elements elements1 = document.select("div[class=links]");
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+                            webView.loadDataWithBaseURL(null, elements.toString(), "text/html", "utf-8", null);
                         }
                     });
                 } catch (IOException e) {

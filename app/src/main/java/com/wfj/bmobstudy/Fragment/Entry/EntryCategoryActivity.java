@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description 苏科词条
+ * @description 江理词条
  * @date: 2020/4/26
  * @author: a */
 public class EntryCategoryActivity extends AppBaseActivity {

@@ -15,7 +15,7 @@ import cn.bmob.v3.listener.FindListener;
 public class FunctionStateUtil {
     //决定百度文档下载功能是否开放
     public static boolean BaiDuDocumentDownload = true;
-    //决定苏科词条功能是否开放
+    //决定江理词条功能是否开放
     public static boolean Entry = true;
     //决定获取手机验证码功能是否开放
     public static boolean PhoneVerifyCode = true;
@@ -60,6 +60,4 @@ public class FunctionStateUtil {
             }
         });
     }
-
-
 }

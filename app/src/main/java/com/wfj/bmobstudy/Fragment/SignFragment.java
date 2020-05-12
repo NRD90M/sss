@@ -17,6 +17,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.jju.howe.howeassistant.activity.RobotMainActivity;
 import com.wfj.bmobstudy.Activity.AoLanActivity;
 import com.wfj.bmobstudy.Activity.AppBaseActivity;
 import com.wfj.bmobstudy.Activity.LibraryActivity;
@@ -69,7 +70,7 @@ public class SignFragment extends Fragment  {
             "小工具",
             "志愿者时间",
             "办公电话",
-            "苏科词条"
+            "江理词条"
     };
     private GridView gridView;
 
@@ -193,7 +194,7 @@ public class SignFragment extends Fragment  {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0://学校概况
-                        myStartActivity(getActivity(),brInUsActivity.class);
+                        myStartActivity(getActivity(), brInUsActivity.class);
 //                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fl_content,brInUsFragment).addToBackStack(null).commit();
                         break;
                     case 1://一卡通
@@ -220,11 +221,11 @@ public class SignFragment extends Fragment  {
                     case 8:// 办公电话
                         myStartActivity(getActivity(),PhoneActivity.class);
                         break;
-                    case 9://苏科词条
+                    case 9://江理词条
                         if (FunctionStateUtil.Entry) {
                             myStartActivity(getActivity(),EntryCategoryActivity.class);
                         } else {
-                            RxToast.info("苏科词条正在调整中！");
+                            RxToast.info("江理词条正在调整中！");
                         }
                         break;
 
@@ -248,10 +249,6 @@ public class SignFragment extends Fragment  {
     }
 
     private void get_info(final View v) {
-
-        try {
-            Thread.sleep(5000);
-        }catch (InterruptedException e){}
         //获取轮播图的图片地址，标题与详细内容的url
         SlideShowUtil.get_slideShow_info(new CallBackListener() {
             @Override
@@ -290,11 +287,11 @@ public class SignFragment extends Fragment  {
         //设置图片集合
         List<String> img_url = new ArrayList<>();
         List<String> title = new ArrayList<>();
-        final List<String> detail_url = new ArrayList<>();
+//        final List<String> detail_url = new ArrayList<>();
         for (SlideShow slideShow : mslideShowList) {
             img_url.add(slideShow.getImg_url());
             title.add(slideShow.getTitle());
-            detail_url.add(slideShow.getDetail_url());
+//            detail_url.add(slideShow.getDetail_url());
         }
         banner.setImages(img_url);
         //设置banner动画效果
@@ -312,10 +309,10 @@ public class SignFragment extends Fragment  {
             public void OnBannerClick(int position) {
                 //此时需要暂停轮播。否则返回时与当前点击的轮播页面不一致
                 banner.stopAutoPlay();
-                Intent i = new Intent(getActivity(), NewsInfoActivity.class);
-                i.putExtra("url", detail_url.get(position));
-                startActivity(i);
-                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+//                Intent i = new Intent(getActivity(), NewsInfoActivity.class);
+//                i.putExtra("url", detail_url.get(position));
+//                startActivity(i);
+//                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
         //banner设置方法全部调用完毕时最后调用

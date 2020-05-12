@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.2'
         classpath 'com.novoda:bintray-release:0.3.4'
-
+        classpath 'com.buyi.huxq17:agencyplugin:1.1.2'//悬浮吸附按钮
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -17,12 +17,12 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+
         //Bmob的maven仓库地址，必须填写
         maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
         maven {url 'https://dl.bintray.com/chaozhouzhang/maven' }
-            maven { url 'https://maven.google.com' }
-//            google()
-            maven { url "https://jitpack.io" }
+        maven { url 'https://maven.google.com' }
+        maven { url "https://jitpack.io" }
         google()
         //maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
     }
