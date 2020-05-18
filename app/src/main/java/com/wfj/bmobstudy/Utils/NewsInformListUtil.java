@@ -3,6 +3,7 @@ package com.wfj.bmobstudy.Utils;
 import android.util.Log;
 
 import com.wfj.bmobstudy.Bean.NewsInform;
+import com.wfj.bmobstudy.Constant.UstsValue;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,29 +16,23 @@ import java.util.List;
 import okhttp3.*;
 
 /**
- * @description 描述一下方法的作用
+ * @description 获取学院新闻前五条中有图片的新闻，系部动态前五条中有图片的快讯
  * @date: 2020/4/26
  * @author: a */
 public class NewsInformListUtil {
     private static OkHttpClient client = new OkHttpClient();
     private static String[] categories_url = {
-            "http://news.usts.edu.cn/news/news_more.asp?lm2=1",
-            "http://news.usts.edu.cn/news/news_more.asp?lm2=2"};
+            "http://www.asc.jx.cn/ykxw/xyxw.htm",
+            "http://www.asc.jx.cn/ykxw/xbdt.htm"};
     private static List<NewsInform> newsInformList1 = new ArrayList<>();
     private static List<NewsInform> newsInformList2 = new ArrayList<>();
     private static List<NewsInform> newsInformListall = new ArrayList<>();
     public static HashMap<String, String> first_pic_url_map = new HashMap<>();
-    //当前处于第几页
+    //当前处于第几页 //静态的。不一定是48页
     public static int page = 1;
     //当前的地址
     public static String current_url = "";
-
-
-    public static String[] url_tag = {"http://news.usts.edu.cn", "http://notify.usts.edu.cn"};
-
-
     /**
-     * 获取江理要闻前五条中有图片的新闻，校园快讯前五条中有图片的快讯
      * 获取两者的列表
      */
     public static void get_news_inform_pic_url(two_categories_listCall listCall) {
@@ -45,7 +40,6 @@ public class NewsInformListUtil {
         NewsInformUtil.get_list(categories_url[0], new NewsInformUtil.NewsinformCall() {
             @Override
             public void success(List<NewsInform> list) {
-
 
                 for (NewsInform newsInform : list) {
                     newsInformList1.add(newsInform);
@@ -137,15 +131,16 @@ public class NewsInformListUtil {
                 String un_pic_url = "";
                 String pic_url = "";
                 try {
-                    un_pic_url = document.select("div[class=content]").select("a[href]").first().attr("href");
-                } catch (NullPointerException e) {
-                    pic_url = "";
+                    un_pic_url = document.select("p[class=vsbcontent_img]").select("img[src]").first().attr("src");
+
+                }catch (Exception e){
+                    un_pic_url = "";
                 }
                 if (un_pic_url.endsWith("jpg")) {
                     if (un_pic_url.contains("http")) {
                         pic_url = un_pic_url;
                     } else {
-                        pic_url = "http://news.usts.edu.cn/" + un_pic_url;
+                        pic_url = UstsValue.official_jl + un_pic_url;
                     }
                 }
                 urlCall.success(url, pic_url);
@@ -156,16 +151,14 @@ public class NewsInformListUtil {
     //由当前页数获得列表并解析
     public static void get_list_by_page(String url, final get_list_by_pageCall pageCall) {
         String true_url = "";
-        if (page == 1) {
+//        if (page == 1) {
             true_url = url;
-        } else if (!current_url.contains("page")) {
-            true_url = url + "&page=" + page;
-        } else if (current_url.contains("page")) {
-            true_url = current_url.split("&")[0] + "&page=" + page;
-        }
-        page++;
+//        } else{
+//            true_url = current_url.split(".htm")[0] + "/"+47+".htm";//http://www.asc.jx.cn/ykxw/xyxw/47.htm
+//            Log.d("wenfujing", "get_list_by_page: "+true_url);
+//        }
+//        page++;
         current_url = true_url;
-        Log.e("tag", current_url);
         NewsInformUtil.get_list(true_url, new NewsInformUtil.NewsinformCall() {
             @Override
             public void success(List<NewsInform> list) {

@@ -21,7 +21,7 @@ import com.wfj.bmobstudy.Utils.ShowOrHiddenUtil;
 import cn.bmob.v3.BmobUser;
 
 /**
- * @description 描述一下方法的作用
+ * @description 账号绑定
  * @date: 2020/4/26
  * @author: a */
 public class BindingFragment extends Fragment {
@@ -94,21 +94,21 @@ public class BindingFragment extends Fragment {
     private class phoneOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            changeFragment(R.id.fl_content, new UpdatePhoneFragment());
+            changeFragment(R.id.viewPager, new UpdatePhoneFragment());
         }
     }
 
     private class updateQQOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            changeFragment(R.id.fl_content, new UpdateQQFragment());
+            changeFragment(R.id.viewPager, new UpdateQQFragment());
         }
     }
 
     private class updateWeChatOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            changeFragment(R.id.fl_content, new UpdateWeChatFragment());
+            changeFragment(R.id.viewPager, new UpdateWeChatFragment());
         }
     }
 }

@@ -14,7 +14,7 @@ import com.wfj.bmobstudy.R;
 import com.wfj.bmobstudy.Utils.ShowOrHiddenUtil;
 
 /**
- * @description 描述一下方法的作用
+ * @description 账号设置
  * @date: 2020/4/26
  * @author: a */
 public class SetAccountFragment extends Fragment {
@@ -56,13 +56,13 @@ public class SetAccountFragment extends Fragment {
 
     private class UpdateUsernameOnClickListener implements View.OnClickListener {
         public void onClick(View v) {
-            changeFragment(R.id.fl_content, new UpdateUsernameFragment());
+            changeFragment(R.id.viewPager, new UpdateUsernameFragment());
         }
     }
 
     private class updatePasswordOnClickListener implements View.OnClickListener {
         public void onClick(View v) {
-            changeFragment(R.id.fl_content, new UpdatePasswordFragment());
+            changeFragment(R.id.viewPager, new UpdatePasswordFragment());
 
         }
     }

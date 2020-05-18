@@ -10,6 +10,11 @@ public class UstsValue {
      */
     public static final String official_jl = "http://www.asc.jx.cn/";
     public static final String official_website = "http://www.usts.edu.cn/";
+    /**
+    * 首页地址 http://www.asc.jx.cn/index.htm
+    * */
+    public static final String official_index = "http://www.asc.jx.cn/index.htm";
+
     /*
     * 图书馆主页地址
     * */

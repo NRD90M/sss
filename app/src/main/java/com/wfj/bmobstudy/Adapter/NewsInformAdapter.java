@@ -14,7 +14,7 @@ import com.wfj.bmobstudy.R;
 import java.util.List;
 
 /**
- * @description 描述一下方法的作用
+ * @description 详细新闻界面
  * @date: 2020/4/26
  * @author: a */
 public class NewsInformAdapter extends BaseQuickAdapter<NewsInform, BaseViewHolder> {
@@ -25,7 +25,7 @@ public class NewsInformAdapter extends BaseQuickAdapter<NewsInform, BaseViewHold
     @Override
     protected void convert(BaseViewHolder helper, NewsInform item) {
         helper.setText(R.id.tv_news_inform_title, item.getTitle())
-                .setText(R.id.tv_news_inform_time, item.getTime().substring(1, item.getTime().length() - 1))
+                .setText(R.id.tv_news_inform_time, item.getTime())
                 .setText(R.id.tv_news_inform_read, item.getRead());
         //.setImageResource(R.id.iv_news_inform, R.mipmap.ic_launcher);
         if (item.getFirst_pic_url() == "") {

@@ -19,7 +19,7 @@ import com.wfj.bmobstudy.Utils.Knowledge.KnowledgeUtil;
 
 /**
  * @description 交流界面
- * @date: 2020/4/26
+ * @date: 2020/4/26 爬取大学生知识网的首页
  * @author: a */
 
 public class CommunityFragment extends Fragment {

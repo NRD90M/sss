@@ -19,7 +19,7 @@
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:padding="8dp"
-            android:text="江理资讯"
+            android:text="江西理工大学资讯"
             android:textColor="#000000"
             android:textSize="14sp" />
 

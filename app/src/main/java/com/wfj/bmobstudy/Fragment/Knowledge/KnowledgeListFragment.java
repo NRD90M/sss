@@ -98,7 +98,7 @@ public class KnowledgeListFragment extends Fragment {
                 fragment.setArguments(b);
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 manager.beginTransaction()
-                        .replace(R.id.fl_content, fragment)
+                        .replace(R.id.viewPager, fragment)
                         .addToBackStack(null)
                         .commit();
             }

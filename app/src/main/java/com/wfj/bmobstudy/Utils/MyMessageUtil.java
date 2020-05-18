@@ -46,7 +46,7 @@ public class MyMessageUtil {
         BmobQuery<Message> query = new BmobQuery<>();
         query.setLimit(10);
         query.setSkip(10 * current_page);
-        query.order("-createdAt");
+        query.order("-createdAt");//按创建时间排序
         query.findObjects(new FindListener<Message>() {
             @Override
             public void done(List<Message> list, BmobException e) {

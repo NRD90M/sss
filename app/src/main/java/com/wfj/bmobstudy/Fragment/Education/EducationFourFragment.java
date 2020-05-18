@@ -21,7 +21,7 @@ import com.vondear.rxtools.view.RxToast;
 import java.util.List;
 
 /**
- * @description 描述一下方法的作用
+ * @description 教务管理界面
  * @date: 2020/4/26
  * @author: a */
 public class EducationFourFragment extends Fragment {
@@ -54,16 +54,16 @@ public class EducationFourFragment extends Fragment {
     }
 
     private void initView(View v) {
-        EducationOptionalCourseListUtil.get_list(get_true_url(), new EducationOptionalCourseListUtil.get_ListCall() {
+        EducationOptionalCourseListUtil.get_list(current_url, new EducationOptionalCourseListUtil.get_ListCall() {
             @Override
-            public void success(final List<EducationOptionalCourse> list, final int all) {
+            public void success(final List<EducationOptionalCourse> list) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         initData(list);
-                        all_number = all;
+                        all_number = list.size();
                         shown = shown + list.size();
-                        current_page++;
+//                        current_page++;
                     }
                 });
 
@@ -71,7 +71,7 @@ public class EducationFourFragment extends Fragment {
 
             @Override
             public void fail() {
-                RxToast.error("公选课简介获取失败！");
+//                RxToast.error("教务公告获取失败！");
             }
         });
     }
@@ -111,23 +111,23 @@ public class EducationFourFragment extends Fragment {
                 if (shown >= all_number) {
                     adapter.loadMoreEnd();
                 } else {
-                    EducationOptionalCourseListUtil.get_list(get_true_url(), new EducationOptionalCourseListUtil.get_ListCall() {
+                    EducationOptionalCourseListUtil.get_list(current_url, new EducationOptionalCourseListUtil.get_ListCall() {
                         @Override
-                        public void success(final List<EducationOptionalCourse> list, int all) {
+                        public void success(final List<EducationOptionalCourse> list) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     adapter.addData(list);
                                     adapter.loadMoreComplete();
                                     shown = shown + list.size();
-                                    current_page++;
+//                                    current_page++;
                                 }
                             });
                         }
 
                         @Override
                         public void fail() {
-                            RxToast.error("拉取公选课简介失败！");
+                            RxToast.error("拉取教务信息失败！");
                         }
                     });
                 }

@@ -11,18 +11,25 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.Utils;
 
+import androidx.viewpager.widget.ViewPager;
 import cn.droidlover.xrichtext.FloatBallManager;
 import cn.droidlover.xrichtext.menu.MenuItem;
 import cn.droidlover.xrichtext.utils.dpUtils;
 
 import com.jju.howe.howeassistant.activity.RobotMainActivity;
+import com.wfj.bmobstudy.Adapter.FragmentViewPagerAdapter;
 import com.wfj.bmobstudy.Fragment.CommunityFragment;
 import com.wfj.bmobstudy.Fragment.CourseFragment;
 import com.wfj.bmobstudy.Fragment.SettingFragment;
 import com.wfj.bmobstudy.Fragment.SignFragment;
 import com.wfj.bmobstudy.R;
 import com.wfj.bmobstudy.Utils.BackHandlerHelper;
+import com.wfj.bmobstudy.Utils.Entry.EntryUtil;
 import com.wfj.bmobstudy.Utils.FunctionStateUtil;
+import com.wfj.bmobstudy.View.MyViewPager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -41,15 +48,15 @@ import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
  * @date: 2020/4/26
  * @author: a */
 public class MainActivity extends AppBaseActivity {
-    private Fragment signFragment;
-    private Fragment courseFragment;
-    private Fragment communityFragment;
-    private Fragment settingFragment;
-    private FragmentManager fragmentManager;
     private NavigationController mNavigationController;
     private PageNavigationView pageBottomTabLayout;
-    public FrameLayout fl_content;
+    public MyViewPager viewPager;
     private FloatBallManager mFloatballManager;
+
+    private int curPosition = 0;
+
+    //保存 主页 Fragment 的视图
+    private List<Fragment> fragmentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +67,9 @@ public class MainActivity extends AppBaseActivity {
         initSinglePageFloatball(showMenu);
         initViews();
         initTab();
-//        initFunctionState();
+        initFunctionState();
         //获取服务器时间
-//        EntryUtil.get_current_time();
+        EntryUtil.get_current_time();
         //5 如果没有添加菜单，可以设置悬浮球点击事件
         if (mFloatballManager.getMenuItemSize() == 0) {
             mFloatballManager.setOnFloatBallClickListener(new FloatBallManager.OnFloatBallClickListener() {
@@ -108,7 +115,6 @@ public class MainActivity extends AppBaseActivity {
     private void initSinglePageFloatball(boolean showMenu) {
         //1 初始化悬浮球配置，定义好悬浮球大小和icon的drawable
         int ballSize = dpUtils.dpToPx(120, getResources());
-//        int ballSize = DensityUtil.dip2px(this, 45);
         Drawable ballIcon = BackGroudSeletor.getdrawble("ic_floatball", this);
         FloatBallCfg ballCfg = new FloatBallCfg(ballSize, ballIcon, FloatBallCfg.Gravity.RIGHT_CENTER);
         //设置悬浮球不半隐藏
@@ -170,21 +176,54 @@ public class MainActivity extends AppBaseActivity {
     }
 
     private void initViews() {
-        signFragment = new SignFragment();
-//        educationFragment = new EducationFragment();
-        courseFragment = new CourseFragment();
-        communityFragment = new CommunityFragment();
-        settingFragment = new SettingFragment();
-        fragmentManager = getSupportFragmentManager();
-        fl_content=findViewById(R.id.fl_content);
-        //设置默认显示的Fragment
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fl_content,  signFragment)
-                .commit();
+        viewPager=findViewById(R.id.viewPager);
+        viewPager.setScrollble(false);//ViewPager是否可以滑动
+        fragmentList = new ArrayList<>();
+        fragmentList.add(new SignFragment());
+        fragmentList.add(new CourseFragment());
+        fragmentList.add(new CommunityFragment());
+        fragmentList.add(new SettingFragment());
 
-        //tv_home_top.setText("我要签到");
-
+        viewPager.setAdapter(new FragmentViewPagerAdapter(getSupportFragmentManager(),viewPager,fragmentList));
+//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+////                switch (position){
+////                    case 0:
+////                        mNavigationController.setSelect(0);
+////                        break;
+////                    case 1:
+////                        mNavigationController.setSelect(1);
+////                        break;
+////                    case 2:
+////                        mNavigationController.setSelect(2);
+////                        break;
+////                    case 3:
+////                        mNavigationController.setSelect(3);
+////                        break;
+////
+////                }
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(final int position) {
+////                setNavChange(position);
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
+    }
+    //点击底部导航 同步
+    private void setNavChange(int position) {
+        int keyAt = mNavigationController.getSelected();
+        if (curPosition == keyAt){
+            return;
+        }
+        curPosition = keyAt;
     }
 
     private void initTab() {
@@ -192,43 +231,26 @@ public class MainActivity extends AppBaseActivity {
         mNavigationController = pageBottomTabLayout.material()
                 .addItem(R.drawable.home, "主页", getResources().getColor(R.color.light_blue))
                 .addItem(R.drawable.education, "学习", getResources().getColor(R.color.tanedu))
-                .addItem(R.drawable.community, "交流", getResources().getColor(R.color.ori_main_color))
+                .addItem(R.drawable.community, "知识网", getResources().getColor(R.color.ori_main_color))
                 .addItem(R.drawable.setting, "设置", 0xFF455A64)
                 .setDefaultColor(0x89FFFFFF)//未选中状态的颜色
                 .setMode(MaterialMode.CHANGE_BACKGROUND_COLOR | MaterialMode.HIDE_TEXT)//这里可以设置样式模式，总共可以组合出4种效果
                 .build();
 
         mNavigationController.setSelect(0);
+
+
         //设置Item选中事件的监听
         mNavigationController.addTabItemSelectedListener(new OnTabItemSelectedListener() {
             @Override
             public void onSelected(int index, int old) {
-                FragmentTransaction  fragmentTransaction = fragmentManager.beginTransaction();
-                switch (index) {
-                    case 0:
-                        fragmentTransaction.replace(R.id.fl_content, signFragment).commit();
-
-                        break;
-                    case 1:
-                        fragmentTransaction.replace(R.id.fl_content, courseFragment).commit();
-
-                        break;
-                    case 2:
-                        fragmentTransaction.replace(R.id.fl_content, communityFragment).commit();
-
-                        break;
-                    case 3:
-                        fragmentTransaction.replace(R.id.fl_content, settingFragment).commit();
-
-                        break;
-                }
+                viewPager.setCurrentItem(index);
             }
 
             @Override
             public void onRepeat(int index) {
             }
         });
-
     }
 
 
@@ -238,6 +260,7 @@ public class MainActivity extends AppBaseActivity {
 
     public void show_home_bottom() {
         pageBottomTabLayout.setVisibility(View.VISIBLE);
+        viewPager.setVisibility(View.VISIBLE);
     }
 
     private void initFunctionState() {
@@ -248,20 +271,22 @@ public class MainActivity extends AppBaseActivity {
     }
 
     public void onBackPressed() {
-        show_home_bottom();
-        int fragment_count = getSupportFragmentManager().getBackStackEntryCount();
-        if (fragment_count == 1) {
 
+        //当fragment点击返回时，显示底部和viewPager
+        show_home_bottom();
+//        int fragment_count = getSupportFragmentManager().getBackStackEntryCount();
+       /* if (fragment_count == 0) {
             Intent home = new Intent(Intent.ACTION_MAIN);
             home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             home.addCategory(Intent.CATEGORY_HOME);
             startActivity(home);
             //moveTaskToBack(false);
-        } else if (!BackHandlerHelper.handleBackPress(this)) {
-            super.onBackPressed();
-        }else {
-            super.onBackPressed();
-        }
+        } else */
+//       if (!BackHandlerHelper.handleBackPress(this)) {
+//            super.onBackPressed();
+//        }else {
+//            super.onBackPressed();
+//        }
         super.onBackPressed();
     }
 

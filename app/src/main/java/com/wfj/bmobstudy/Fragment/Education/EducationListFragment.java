@@ -6,10 +6,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,10 +28,15 @@ import com.wfj.bmobstudy.Utils.Education.EducationListUtil;
 import com.wfj.bmobstudy.Utils.ShowOrHiddenUtil;
 import com.vondear.rxtools.view.RxToast;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.List;
 
 /**
- * @description 描述一下方法的作用
+ * @description 教务信息--》4个管理规定+4个图标（）
  * @date: 2020/4/26
  * @author: a */
 public class EducationListFragment extends Fragment {
@@ -37,20 +49,21 @@ public class EducationListFragment extends Fragment {
     private String current_url;
     private String category;
     private View rootView;
+    private WebView wv_education;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
-            View v = inflater.inflate(R.layout.fragment_education_list, null, false);
+            View v = inflater.inflate(R.layout.fragment_education_web, null, false);
             current_url = getArguments().getString("url");
             category = getArguments().getString("category");
             rootView = v;
-            initView(v);
+            initWebView(v);
+
         }
-        ShowOrHiddenUtil.hidden_home_bottom(getActivity());
         return rootView;
     }
 
-    private void initView(View v) {
+    private void initWebView(View v) {
         ly_back = (LinearLayout) v.findViewById(R.id.ly_back);
         ly_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,128 +73,44 @@ public class EducationListFragment extends Fragment {
         });
         tv_info = (TextView) v.findViewById(R.id.tv_info);
         tv_info.setText("" + category);
-        initRecyclerView(v);
 
-        EducationListUtil.get_list(get_true_url(), new EducationListUtil.get_listCall() {
+        wv_education = (WebView) v.findViewById(R.id.wv_education);
+        WebSettings settings = wv_education.getSettings();
+        settings.setJavaScriptEnabled(true);//设置WebView是否允许执行JavaScript脚本，默认false
+        settings.setAppCacheEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);//重写使用缓存的方式，默认值LOAD_DEFAULT
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);//让JavaScript自动打开窗口，默认false
+        settings.setUseWideViewPort(true);//WebView是否支持HTML的“viewport”标签或者使用wide viewport
+        settings.setLoadWithOverviewMode(true);//设置WebView是否在概览模式下加载页面
+        settings.setTextZoom(200);
+        get_html();
+    }
+    private void get_html(){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(current_url)
+                .build();
+        client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
-            public void success(final List<Education> list, final int all) {
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String html = new String(response.body().bytes(), "utf-8");
+                Document document = Jsoup.parse(html);
+//                Elements elements = document.select("div[class=contain");
+                //删除下一条
+//                elements.select("div[class=content-sxt fl]").remove();
+                final String content = document.toString();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initData(list);
-                        all_number = all;
-                        shown = shown + list.size();
-                        current_page++;
+                        wv_education.loadDataWithBaseURL("http://jw.asc.jx.cn/", content, "text/html", "utf-8", null);
                     }
                 });
             }
-
-            @Override
-            public void fail() {
-                RxToast.error("获取失败！");
-            }
         });
-
-    }
-
-    private void initRecyclerView(View v) {
-        rcv_education_list = (RecyclerView) v.findViewById(R.id.rcv_education_list);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        rcv_education_list.setLayoutManager(manager);
-    }
-
-    private void initData(final List<Education> list) {
-        final EducationAdapter adapter = new EducationAdapter(R.layout.item_education, list);
-        adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
-        adapter.isFirstOnly(true);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                FragmentManager manager = getActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                EducationWebFragment fragment = new EducationWebFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("url", list.get(position).getUrl());
-                fragment.setArguments(bundle);
-                transaction
-                        .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_left)
-                        .replace(R.id.fl_content, fragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
-        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                if (shown >= all_number) {
-                    adapter.loadMoreEnd();
-                } else {
-                    //再次获取数据
-                    //此处应该是判断网络情况，默认良好
-
-                    EducationListUtil.get_list(get_true_url(), new EducationListUtil.get_listCall() {
-                        @Override
-                        public void success(final List<Education> list, int all) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    adapter.addData(list);
-                                    adapter.loadMoreComplete();
-                                    shown = shown + list.size();
-                                    current_page++;
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void fail() {
-                            adapter.loadMoreFail();
-                        }
-                    });
-
-                }
-
-            }
-        }, rcv_education_list);
-        rcv_education_list.setAdapter(adapter);
-
-    }
-
-    private String get_true_url() {
-        String true_url = "";
-        if (current_page == 1) {
-            true_url = current_url;
-        } else {
-            //总页数,每页18条信息
-            int all_page = (all_number % 18) == 0 ? (all_number / 18) : (all_number / 18 + 1);
-            String suffix_url = "/" + (all_page + 1 - current_page) + ".htm";
-
-            //公告动态模块
-            if (current_url.contains("/xszl/xxswzn")) {
-                true_url = "http://jwch.usts.edu.cn/xszl/xxswzn" + suffix_url;
-            } else if (current_url.contains("/xszl/xjgl")) {
-                true_url = "http://jwch.usts.edu.cn/xszl/xjgl" + suffix_url;
-            } else if (current_url.contains("/xszl/ksxz")) {
-                true_url = "http://jwch.usts.edu.cn/xszl/ksxz" + suffix_url;
-            } else if (current_url.contains("/xszl/xsbgxz")) {
-                true_url = "http://jwch.usts.edu.cn/xszl/xsbgxz" + suffix_url;
-            }
-
-
-            //信息公开模块
-            else if (current_url.contains("/fwzn/fwzn")) {
-                true_url = "http://jwch.usts.edu.cn/fwzn/fwzn" + suffix_url;
-            } else if (current_url.contains("/fwzn/xnxl")) {
-                true_url = "http://jwch.usts.edu.cn/fwzn/xnxl" + suffix_url;
-            } else if (current_url.contains("/fwzn/kbcx")) {
-                true_url = "http://jwch.usts.edu.cn/fwzn/kbcx" + suffix_url;
-            } else if (current_url.contains("dwksxx")) {
-                true_url = "http://jwch.usts.edu.cn/fwzn/dwksxx" + suffix_url;
-            }
-
-        }
-        Log.e("true_page", true_url);
-        return true_url;
     }
 }

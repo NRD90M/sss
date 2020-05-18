@@ -1,5 +1,6 @@
-package com.wfj.bmobstudy.Fragment;
+package com.wfj.bmobstudy.Activity;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 
@@ -16,11 +17,13 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.material.appbar.AppBarLayout;
+import com.wfj.bmobstudy.Activity.AppBaseActivity;
 import com.wfj.bmobstudy.Adapter.EducationPagerAdapter;
 import com.wfj.bmobstudy.Fragment.Education.EducationListFragment;
 import com.wfj.bmobstudy.R;
 import com.wfj.bmobstudy.Utils.Education.EducationBannerUtil;
 import com.wfj.bmobstudy.Utils.GlideImageLoader;
+import com.wfj.bmobstudy.Utils.Toast;
 import com.wfj.bmobstudy.View.MyGridView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -35,16 +38,15 @@ import java.util.List;
  * @description 教务界面
  * @date: 2020/4/26
  * @author: a */
-public class EducationFragment extends Fragment {
+public class EducationActivity extends AppBaseActivity {
     private TextView tv_more_education;
     private Banner banner;
     private MyGridView gv_gonggao;
     private MyGridView gv_info_gongkai;
     private PagerSlidingTabStrip tab_education;
     private ViewPager vp_education;
-    private View rootView;
     private STATE abl_state;
-
+    private Context context;
     //展开、折叠、中间
     private enum STATE {
         EXPANDED,
@@ -54,35 +56,40 @@ public class EducationFragment extends Fragment {
 
     private AppBarLayout abl_education;
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (rootView == null) {
-            View v = inflater.inflate(R.layout.fragment_education, null, false);
-            rootView = v;
-            initViews(v);
-        }
-        //避免快速点击教务时，隐藏底部按钮的问题
-        //ShowOrHiddenUtil.show_home_bottom(getActivity());
-
-        return rootView;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = this;
+        initViews();
     }
 
-    public void initViews(final View v) {
+    /**
+     * 返回 Activity Layout
+     *
+     * @return Layout ID
+     */
+    @Override
+    public int setLayoutView() {
+        return R.layout.fragment_education;
+    }
+
+    public void initViews() {
         EducationBannerUtil.get_banner_list(new EducationBannerUtil.get_bannerCall() {
             @Override
             public void success(final List<String> list) {
-                getActivity().runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initBanner(v, list);
+                        initBanner(list);
                     }
                 });
             }
         });
-        initGrdView_gonggao(v);
-        initGrdView_info_gongkai(v);
-        initEducationLayout(v);
-        initAppBarLayout(v);
-        tv_more_education = (TextView) v.findViewById(R.id.tv_more_education);
+        initGrdView_gonggao();
+        initGrdView_info_gongkai();
+        initEducationLayout();
+        initAppBarLayout();
+        tv_more_education = (TextView) findViewById(R.id.tv_more_education);
         tv_more_education.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,8 +106,8 @@ public class EducationFragment extends Fragment {
     }
 
     //初始化banner
-    private void initBanner(View v, List<String> list) {
-        banner = (Banner) v.findViewById(R.id.banner);
+    private void initBanner( List<String> list) {
+        banner = (Banner) findViewById(R.id.banner);
         //设置banner样式
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         //设置指示器位置（当banner模式中有指示器时）
@@ -118,21 +125,18 @@ public class EducationFragment extends Fragment {
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(int position) {
-                com.wfj.bmobstudy.Utils.Toast.show_info(getActivity(), "该图片不包括内容！");
-
+                Toast.show_info(context, "该图片不包括内容！");
             }
         });
         //banner设置方法全部调用完毕时最后调用
         banner.start();
-
-
     }
 
     //初始化公告GridView
-    private void initGrdView_gonggao(View v) {
-        gv_gonggao = (MyGridView) v.findViewById(R.id.gv_gonggao);
-        String img[] = new String[]{"transaction_guide", "school_manage", "exam_know", "table_download"};
-        final String name[] = new String[]{"事务指南", "学籍管理", "考试须知", "表格下载"};
+    private void initGrdView_gonggao() {
+        gv_gonggao = (MyGridView) findViewById(R.id.gv_gonggao);
+        String img[] = new String[]{"transaction_guide","exam_know", "table_download" , "school_manage"};
+        final String name[] = new String[]{ "质量评价","考试管理", "学籍管理", "选课规定"};
         //生成动态数组，并且转入数据
 
         ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();
@@ -143,7 +147,7 @@ public class EducationFragment extends Fragment {
             lstImageItem.add(map);
         }
         //生成适配器的ImageItem 与动态数组的元素相对应
-        SimpleAdapter saImageItems = new SimpleAdapter(getActivity(),
+        SimpleAdapter saImageItems = new SimpleAdapter(context,
                 lstImageItem,//数据来源
                 R.layout.item_grid,//item的XML实现
 
@@ -157,14 +161,14 @@ public class EducationFragment extends Fragment {
         gv_gonggao.setAdapter(saImageItems);
         //添加消息处理
         final String url[] = {
-                "http://jwch.usts.edu.cn/xszl/xxswzn.htm",
-                "http://jwch.usts.edu.cn/xszl/xjgl.htm",
-                "http://jwch.usts.edu.cn/xszl/ksxz.htm",
-                "http://jwch.usts.edu.cn/xszl/xsbgxz.htm"};
+                "http://jw.asc.jx.cn/_data/read_detail_glgd.aspx?rid=2",//质量管理
+                "http://jw.asc.jx.cn/_data/read_detail_glgd.aspx?rid=3",//考试
+                "http://jw.asc.jx.cn/_data/read_detail_glgd.aspx?rid=4",//学籍
+                "http://jw.asc.jx.cn/_data/read_detail_glgd.aspx?rid=5"};//选课
         gv_gonggao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
                 EducationListFragment fragment = new EducationListFragment();
                 Bundle bundle = new Bundle();
@@ -198,10 +202,10 @@ public class EducationFragment extends Fragment {
 
 
     //初始化信息公开GridView
-    private void initGrdView_info_gongkai(View v) {
-        gv_info_gongkai = (MyGridView) v.findViewById(R.id.gv_info_gongkai);
-        String img[] = new String[]{"service_guide", "calendar", "course_query", "external_exam"};
-        final String name[] = new String[]{"服务指南", "学校年历", "课表查询", "对外考试"};
+    private void initGrdView_info_gongkai() {
+        gv_info_gongkai = (MyGridView) findViewById(R.id.gv_info_gongkai);
+        String img[] = new String[]{"service_guide", "calendar","external_exam", "course_query"};
+        final String name[] = new String[]{"作息时间", "查看校历", "教师课表","班级课表"};
         //生成动态数组，并且转入数据
 
         ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();
@@ -212,7 +216,7 @@ public class EducationFragment extends Fragment {
             lstImageItem.add(map);
         }
         //生成适配器的ImageItem 与动态数组的元素相对应
-        SimpleAdapter saImageItems = new SimpleAdapter(getActivity(),
+        SimpleAdapter saImageItems = new SimpleAdapter(context,
                 lstImageItem,//数据来源
                 R.layout.item_grid,//item的XML实现
 
@@ -226,14 +230,14 @@ public class EducationFragment extends Fragment {
         gv_info_gongkai.setAdapter(saImageItems);
         //添加消息处理
         final String url[] = {
-                "http://jwch.usts.edu.cn/fwzn/fwzn.htm",
-                "http://jwch.usts.edu.cn/fwzn/xnxl.htm",
-                "http://jwch.usts.edu.cn/fwzn/kbcx.htm",
-                "http://jwch.usts.edu.cn/fwzn/dwksxx.htm"};
+                "http://jw.asc.jx.cn/_data/index_zxsj.aspx",//作息时间
+                "http://jw.asc.jx.cn/_data/index_lookxl.aspx",//查看校历
+                "http://jw.asc.jx.cn/ZNPK/TeacherKBFB.aspx",//教师课表
+                "http://jw.asc.jx.cn/_data/index_GLRY.aspx"};//班级课表
         gv_info_gongkai.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
                 EducationListFragment fragment = new EducationListFragment();
                 Bundle bundle = new Bundle();
@@ -268,17 +272,15 @@ public class EducationFragment extends Fragment {
     /**
      * 初始化PagerSlidingTabStrip以及ViewPager
      */
-    private void initEducationLayout(View v) {
-        vp_education = (ViewPager) v.findViewById(R.id.vp_education);
-        tab_education = (PagerSlidingTabStrip) v.findViewById(R.id.tab_education);
-        vp_education.setAdapter(new EducationPagerAdapter(getActivity().getSupportFragmentManager()));
+    private void initEducationLayout() {
+        vp_education = (ViewPager) findViewById(R.id.vp_education);
+        tab_education = (PagerSlidingTabStrip) findViewById(R.id.tab_education);
+        vp_education.setAdapter(new EducationPagerAdapter(getSupportFragmentManager()));
         tab_education.setViewPager(vp_education);
-
-
     }
 
-    private void initAppBarLayout(View v) {
-        abl_education = (AppBarLayout) v.findViewById(R.id.abl_education);
+    private void initAppBarLayout() {
+        abl_education = (AppBarLayout) findViewById(R.id.abl_education);
         abl_education.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -317,7 +319,7 @@ public class EducationFragment extends Fragment {
 
     public Object getObject(String name) {
         Resources res = getResources();
-        return res.getIdentifier(name, "drawable", getActivity().getPackageName());
+        return res.getIdentifier(name, "drawable", getPackageName());
     }
 
 

@@ -25,15 +25,13 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * @description 描述一下方法的作用
+ * @description 教务信息 详情新闻
  * @date: 2020/4/26
  * @author: a */
 public class EducationWebFragment extends Fragment {
     private LinearLayout ly_back;
     private WebView wv_education;
     private String url;
-    private LinearLayout ly_education_info;
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_education_web, container, false);
@@ -44,7 +42,7 @@ public class EducationWebFragment extends Fragment {
     }
 
     private void initView(View v) {
-        ly_education_info = (LinearLayout) v.findViewById(R.id.ly_education_info);
+
         ly_back = (LinearLayout) v.findViewById(R.id.ly_back);
         ly_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +50,7 @@ public class EducationWebFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
-        ShowOrHiddenUtil.hidden_home_bottom(getActivity());
+//        ShowOrHiddenUtil.hidden_home_bottom(getActivity());
         initWebView(v);
 
     }
@@ -66,7 +64,7 @@ public class EducationWebFragment extends Fragment {
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
-        settings.setTextZoom(250);
+        settings.setTextZoom(200);
         get_html();
     }
 
@@ -85,14 +83,14 @@ public class EducationWebFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String html = new String(response.body().bytes(), "utf-8");
                 Document document = Jsoup.parse(html);
-                Elements elements = document.select("div[class=content fl]");
+                Elements elements = document.select("div[class=contain");
                 //删除下一条
-                elements.select("div[class=content-sxt fl]").remove();
+//                elements.select("div[class=content-sxt fl]").remove();
                 final String content = elements.toString();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        wv_education.loadDataWithBaseURL("http://jwch.usts.edu.cn/", content, "text/html", "utf-8", null);
+                        wv_education.loadDataWithBaseURL("http://jwb.asc.jx.cn/", content, "text/html", "utf-8", null);
                     }
                 });
             }

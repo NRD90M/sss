@@ -8,11 +8,11 @@ import com.wfj.bmobstudy.Fragment.Education.EducationFourFragment;
 import com.wfj.bmobstudy.Utils.Education.EducationOptionalCourseListUtil;
 
 /**
- * @description 描述一下方法的作用
+ * @description 教务（"教务新闻", "考试通告", "信息公开"）
  * @date: 2020/4/26
  * @author: a */
 public class EducationPagerAdapter extends FragmentPagerAdapter {
-    private String title[] = {"石湖校区", "江枫校区", "天平校区"};
+    private String title[] = {"教务新闻", "考试通告", "信息公开"};
 
     public EducationPagerAdapter(FragmentManager fm) {
         super(fm);

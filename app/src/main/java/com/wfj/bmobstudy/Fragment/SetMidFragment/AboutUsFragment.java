@@ -14,7 +14,7 @@ import com.wfj.bmobstudy.R;
 import com.wfj.bmobstudy.Utils.ShowOrHiddenUtil;
 
 /**
- * @description 描述一下方法的作用
+ * @description 关于我们
  * @date: 2020/4/26
  * @author: a */
 public class AboutUsFragment extends Fragment {

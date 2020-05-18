@@ -20,6 +20,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.jju.howe.howeassistant.activity.RobotMainActivity;
 import com.wfj.bmobstudy.Activity.AoLanActivity;
 import com.wfj.bmobstudy.Activity.AppBaseActivity;
+import com.wfj.bmobstudy.Activity.EducationActivity;
 import com.wfj.bmobstudy.Activity.LibraryActivity;
 
 import com.wfj.bmobstudy.Activity.NewsInfoActivity;
@@ -66,11 +67,12 @@ public class SignFragment extends Fragment  {
             "图书馆",
             "成绩查询",
             "学分查询",
-            "奥蓝系统",
+            "奥蓝系统(取消)",
             "小工具",
             "志愿者时间",
             "办公电话",
-            "江理词条"
+            "江理词条",
+            "教务"
     };
     private GridView gridView;
 
@@ -95,7 +97,6 @@ public class SignFragment extends Fragment  {
 
     private PagerSlidingTabStrip news_inform_tab;
     private ViewPager news_inform_vp;
-//    private Fragment brInUsFragment;
 
 
     private View rootView;
@@ -113,15 +114,6 @@ public class SignFragment extends Fragment  {
             //导航标题栏初始化
             initNewsInformLayout(v);
         }
-//        brInUsFragment=new BrInUsFragment();
-
-        //缓存的rootView需要判断是否已经被加过parent，
-        // 如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
-//        ViewGroup parent = (ViewGroup) rootView.getParent();
-//        if (parent != null) {
-//          parent.removeView(rootView);
-//            Log.d(TAG, "onCreateView: "+isRemoving());
-//         }
         return rootView;
     }
 
@@ -175,6 +167,10 @@ public class SignFragment extends Fragment  {
         map9.put("ItemImage", getObject("entry"));//添加图像资源的ID
         map9.put("ItemText", name[9]);//按序号做ItemText
         lstImageItem.add(map9);
+        HashMap<String, Object> map10 = new HashMap<String, Object>();
+        map10.put("ItemImage", getObject("external_exam"));//添加图像资源的ID
+        map10.put("ItemText", name[10]);//按序号做ItemText
+        lstImageItem.add(map10);
         //生成适配器的ImageItem 与动态数组的元素相对应
         SimpleAdapter saImageItems = new SimpleAdapter(getActivity(),
                 lstImageItem,//数据来源
@@ -209,9 +205,9 @@ public class SignFragment extends Fragment  {
                     case 4://学分查询
                         myStartActivity(getActivity(),KwxfActiviy.class);
                         break;
-                    case 5://LANAO
-                        myStartActivity(getActivity(),AoLanActivity.class);
-                        break;
+//                    case 5://LANAO
+//                        myStartActivity(getActivity(),AoLanActivity.class);
+//                        break;
                     case 6:// 小工具
                         myStartActivity(getActivity(),SmallUtilActivity.class);
                         break;
@@ -228,7 +224,9 @@ public class SignFragment extends Fragment  {
                             RxToast.info("江理词条正在调整中！");
                         }
                         break;
-
+                    case 10:// 教务
+                        myStartActivity(getActivity(), EducationActivity.class);
+                        break;
                 }
             }
         });
@@ -259,8 +257,6 @@ public class SignFragment extends Fragment  {
                     @Override
                     public void run() {
                         initBanner(v);
-                        Toast.show(getActivity(), "加载成功！", 1000);
-
                     }
                 });
             }
@@ -334,8 +330,8 @@ public class SignFragment extends Fragment  {
      * 初始化PagerSlidingTabStrip以及ViewPager
      */
     private void initNewsInformLayout(View v) {
-        news_inform_vp = (ViewPager) v.findViewById(R.id.news_inform_vp);
-        news_inform_tab = (PagerSlidingTabStrip) v.findViewById(R.id.news_inform_tab);
+        news_inform_vp = (ViewPager) v.findViewById(R.id.news_inform_vp);//新闻viewPager
+        news_inform_tab = (PagerSlidingTabStrip) v.findViewById(R.id.news_inform_tab);//导航
         news_inform_vp.setAdapter(new NewsInfromPagerAdapter(getChildFragmentManager()));
         news_inform_tab.setViewPager(news_inform_vp);
 

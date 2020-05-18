@@ -22,7 +22,7 @@ import com.wfj.bmobstudy.Utils.ShowOrHiddenUtil;
 import java.util.List;
 
 /**
- * @description 描述一下方法的作用
+ * @description 我的消息
  * @date: 2020/4/26
  * @author: a */
 public class MyMessageFragment extends Fragment {
@@ -89,7 +89,7 @@ public class MyMessageFragment extends Fragment {
                 fragment.setArguments(bundle);
                 transaction
                         .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_left)
-                        .replace(R.id.fl_content, fragment)
+                        .replace(R.id.viewPager, fragment)
                         .addToBackStack(null)
                         .commit();
             }

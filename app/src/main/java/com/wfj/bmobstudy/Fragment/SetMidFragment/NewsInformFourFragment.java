@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @description 描述一下方法的作用
+ * @description 主页的新闻获取（江理要闻、通知公告、学术状态、校园快讯）
  * @date: 2020/4/26
  * @author: a */
 public class NewsInformFourFragment extends Fragment {
@@ -63,6 +63,7 @@ public class NewsInformFourFragment extends Fragment {
                     @Override
                     public void run() {
                         List<NewsInform> newsInforms = new ArrayList<NewsInform>();
+                        //设置最多4则新闻
                         for (int i = 0; i < 4; i++) {
                             newsInforms.add(list.get(i));
                         }

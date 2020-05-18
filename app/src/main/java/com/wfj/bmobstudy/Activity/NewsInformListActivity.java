@@ -29,6 +29,9 @@ import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/*
+* 主页 -点击更多新闻 进入这里
+* */
 public class NewsInformListActivity extends AppBaseActivity {
     private LinearLayout ly_back;
     private Banner banner;
@@ -45,10 +48,10 @@ public class NewsInformListActivity extends AppBaseActivity {
 
     private AppBarLayout abl_news_inform_list;
     private String categories_url[] = {
-            "http://news.usts.edu.cn/news/news_more.asp?lm2=1",
-            "http://notify.usts.edu.cn/news/news_more.asp?lm2=1",
-            "http://notify.usts.edu.cn/news/news_more.asp?lm2=2",
-            "http://news.usts.edu.cn/news/news_more.asp?lm2=2"};
+            "http://www.asc.jx.cn/ykxw/xyxw.htm",
+            "http://www.asc.jx.cn/ykxw/mtgz.htm",
+            "http://www.asc.jx.cn/ykxw/xbdt.htm",
+            "http://www.asc.jx.cn/ykxw/tzgg.htm"};
 
     //设置各类新闻最多400条
     private int all_numbers = 400;
@@ -146,7 +149,7 @@ public class NewsInformListActivity extends AppBaseActivity {
 
     private void initGridView() {
         gridView = (GridView) findViewById(R.id.gv_news_inform_list);
-        String text[] = {"江理要闻", "通知公告", "学术动态", "校园快讯"};
+        String text[] = {"学院新闻", "媒体关注", "系部动态", "通知公告"};
         ArrayList<HashMap<String, Object>> arrayList = new ArrayList<HashMap<String, Object>>();
         HashMap<String, Object> map = new HashMap<>();
         map.put("image", getObject("important"));
@@ -172,6 +175,8 @@ public class NewsInformListActivity extends AppBaseActivity {
                 new int[]{R.id.iv_grid, R.id.tv_grid});
 
         gridView.setAdapter(adapter);
+        //默认加载学院新闻
+        loadNewsData(categories_url[0]);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -189,21 +194,28 @@ public class NewsInformListActivity extends AppBaseActivity {
                         NewsInformListUtil.current_url = categories_url[3];
                         break;
                 }
-                NewsInformListUtil.page = 1;
-                NewsInformListUtil.get_list_by_page(NewsInformListUtil.current_url, new NewsInformListUtil.get_list_by_pageCall() {
+//                NewsInformListUtil.page = 1;
+                //加载新闻列表
+                loadNewsData( NewsInformListUtil.current_url);
+            }
+
+
+        });
+    }
+
+    //加载新闻列表
+    private void loadNewsData(String url) {
+        NewsInformListUtil.get_list_by_page(url, new NewsInformListUtil.get_list_by_pageCall() {
+            @Override
+            public void success(final List<NewsInform> list) {
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void success(final List<NewsInform> list) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                initRecyclerViewData(list);
-                            }
-                        });
+                    public void run() {
+                        initRecyclerViewData(list);
                     }
                 });
             }
         });
-
     }
 
     @SuppressLint("WrongConstant")
@@ -231,28 +243,29 @@ public class NewsInformListActivity extends AppBaseActivity {
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                if (shown >= all_numbers) {
+//                if (shown >= all_numbers) {
+                //为了减少获取信息的缓慢带来的烦恼， 设置只能加载一页
                     adapter.loadMoreEnd();
-                } else {
-                    //再次获取数据
-                    //此处应该是判断网络情况，默认良好
-                    if (true) {
-                        NewsInformListUtil.get_list_by_page(NewsInformListUtil.current_url, new NewsInformListUtil.get_list_by_pageCall() {
-                            @Override
-                            public void success(final List<NewsInform> list) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        adapter.addData(list);
-                                        adapter.loadMoreComplete();
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                        adapter.loadMoreFail();
-                    }
-                }
+//                } else {
+//                    //再次获取数据
+//                    //此处应该是判断网络情况，默认良好
+//                    if (true) {
+//                        NewsInformListUtil.get_list_by_page(NewsInformListUtil.current_url, new NewsInformListUtil.get_list_by_pageCall() {
+//                            @Override
+//                            public void success(final List<NewsInform> list) {
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        adapter.addData(list);
+//                                        adapter.loadMoreComplete();
+//                                    }
+//                                });
+//                            }
+//                        });
+//                    } else {
+//                        adapter.loadMoreFail();
+//                    }
+//                }
 
             }
         }, recyclerView);

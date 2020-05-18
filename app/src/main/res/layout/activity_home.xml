@@ -1,44 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/ly_home_top"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="23dp"
-        android:background="@color/title"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_home_top"
+        <LinearLayout
+            android:id="@+id/ly_home_top"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@color/title"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_home_top"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+
+        <me.majiajie.pagerbottomtabstrip.PageNavigationView
+            android:id="@+id/tab"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:elevation="4dp" />
+
+
+        <com.wfj.bmobstudy.View.MyViewPager
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="#fff"
-            android:textSize="20sp" />
+            android:layout_above="@id/tab"
+            android:layout_below="@id/ly_home_top"
+            android:visibility="visible"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-
-    <me.majiajie.pagerbottomtabstrip.PageNavigationView
-        android:id="@+id/tab"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:elevation="4dp" />
-
-    <FrameLayout
-        android:id="@+id/fl_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/tab"
-        android:layout_below="@id/ly_home_top">
-
-    </FrameLayout>
-
-
-</RelativeLayout>
+</FrameLayout>

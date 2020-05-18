@@ -255,7 +255,7 @@ public class VolunteerLoginActivity extends AppBaseActivity {
                         FragmentManager manager = getSupportFragmentManager();
                         manager.beginTransaction()
                                 .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_left)
-                                .replace(R.id.fl_content, new VolunteerListFragment())
+                                .replace(R.id.viewPager, new VolunteerListFragment())
                                 .addToBackStack(null)
                                 .commit();
                     }

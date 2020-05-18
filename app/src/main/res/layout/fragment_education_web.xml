@@ -33,21 +33,21 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+<!--
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical">-->
 
             <WebView
                 android:id="@+id/wv_education"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp">
+                android:layout_height="match_parent"
+                android:layout_margin="4dp">
 
             </WebView>
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/ly_education_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
                     android:layout_marginLeft="8dp"
                     android:textColor="#343434"
                     android:textSize="17sp" />
-            </LinearLayout>
-        </LinearLayout>
+            </LinearLayout>-->
+     <!--   </LinearLayout>-->
     </ScrollView>
 </LinearLayout>

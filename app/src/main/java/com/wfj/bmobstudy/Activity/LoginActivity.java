@@ -41,8 +41,6 @@ public class LoginActivity extends AppBaseActivity implements View.OnClickListen
         initViews();
         avoid_login();
         // test_login();
-
-
     }
 
     /**

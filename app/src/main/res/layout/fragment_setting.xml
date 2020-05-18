@@ -82,7 +82,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/ly_message"
+                        android:id="@+id/ly_message"
                     style="@style/bg_layout"
                     android:layout_height="45dp"
                     android:layout_below="@+id/ly_authentication"

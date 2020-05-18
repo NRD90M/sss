@@ -27,7 +27,7 @@ import cn.bmob.v3.listener.UpdateListener;
 
 
 /**
- * @description 描述一下方法的作用
+ * @description 修改用户密码
  * @date: 2020/4/26
  * @author: a */
 public class UpdatePasswordFragment extends Fragment {

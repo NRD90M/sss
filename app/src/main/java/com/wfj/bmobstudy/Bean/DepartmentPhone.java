@@ -3,7 +3,7 @@ package com.wfj.bmobstudy.Bean;
 import cn.bmob.v3.BmobObject;
 
 /**
- * @description 描述一下方法的作用
+ * @description 办公电话
  * @date: 2020/4/26
  * @author: a */
 public class DepartmentPhone extends BmobObject {

@@ -3,6 +3,7 @@ package com.wfj.bmobstudy.Utils;
 import android.util.Log;
 
 import com.wfj.bmobstudy.Bean.NewsInform;
+import com.wfj.bmobstudy.Constant.UstsValue;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,10 +25,9 @@ import okhttp3.Call;
 public class NewsInformUtil {
     private static OkHttpClient client = new OkHttpClient();
     public static List<NewsInform> list;
-    public static String[] url_tag = {"http://news.usts.edu.cn", "http://notify.usts.edu.cn"};
     public static List<String> pic_list;
 
-
+    //获取新闻列表
     public static void get_list(final String url, final NewsinformCall newsinformCall) {
         Request request = new Request.Builder()
                 .url(url)
@@ -35,30 +35,26 @@ public class NewsInformUtil {
         client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                Log.d("test", "onFailure: 失败");
             }
 
             public void onResponse(Call call, Response response) throws IOException {
                 Document document = Jsoup.parse(response.body().string());
-                Elements elements = document.select("div[class=list_lb]").select("li");
+                Elements elements = document.select("ul[class=list]").select("li");
                 list = new ArrayList<NewsInform>();
                 NewsInform newsInform;
                 for (Element element : elements) {
                     newsInform = new NewsInform();
-                    String title = element.select("a[title]").attr("title");
-                    String time = element.select("span").text();
-                    String read = element.select("font").text();
+                    String str = element.select("a").text();
+                    String title=str.substring(10, str.length());//标题
+                    String time = str.substring(0, 10);//日期
+//                    String read = element.select("font").text();
                     String true_url = "";
-                    int length = element.select("a[href]").size();
-                    if (length == 1) {
-                        true_url = url_tag[0] + "/news/" + element.select("a[href]").attr("href");
-                    } else if (!url.contains("notify")) {
-                        true_url = url_tag[0] + "/news/" + element.select("a[href]").get(1).attr("href");
-                    } else {
-                        true_url = url_tag[1] + "/news/" + element.select("a[href]").get(1).attr("href");
-                    }
+                    true_url = element.select("a[href]").attr("href");
+
                     newsInform.setTitle(title);
                     newsInform.setTime(time);
-                    newsInform.setRead(read);
+//                    newsInform.setRead(read);
                     newsInform.setUrl(true_url);
                     newsInform.setFirst_pic_url("");
                     list.add(newsInform);

@@ -23,7 +23,7 @@ import com.wfj.bmobstudy.Utils.ShowDialogUtil;
 import com.wfj.bmobstudy.Utils.Toast;
 
 /**
- * @description 描述一下方法的作用
+ * @description 百度文档下载界面
  * @date: 2020/4/26
  * @author: a */
 public class DocumentDownloadFragment extends Fragment implements View.OnClickListener {
@@ -60,10 +60,15 @@ public class DocumentDownloadFragment extends Fragment implements View.OnClickLi
     private void initWebView(View v) {
         webView = (WebView) v.findViewById(R.id.wv_document);
         WebSettings settings = webView.getSettings();
+        settings.setAppCacheEnabled(true);
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
         settings.setJavaScriptEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setAppCacheEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        settings.setTextZoom(200);
+
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {

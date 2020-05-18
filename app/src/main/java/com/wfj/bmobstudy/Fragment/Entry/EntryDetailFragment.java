@@ -84,7 +84,7 @@ public class EntryDetailFragment extends Fragment {
                 bundle.putString("authorId", authorId);
                 fragment.setArguments(bundle);
                 FragmentManager manager = getActivity().getSupportFragmentManager();
-                manager.beginTransaction().replace(R.id.fl_content, fragment).addToBackStack(null).commit();
+                manager.beginTransaction().replace(R.id.viewPager, fragment).addToBackStack(null).commit();
             }
         });
 
@@ -251,7 +251,7 @@ public class EntryDetailFragment extends Fragment {
                 fragment.setArguments(bundle);
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 manager.beginTransaction()
-                        .replace(R.id.fl_content, fragment)
+                        .replace(R.id.viewPager, fragment)
                         .addToBackStack(null)
                         .commit();
 

@@ -13,13 +13,13 @@ import okhttp3.*;
 import okhttp3.Call;
 
 /**
- * @description 描述一下方法的作用
+ * @description 教务信息的轮播图
  * @date: 2020/4/26
  * @author: a */
 public class EducationBannerUtil {
     private static OkHttpClient client = new OkHttpClient();
     //教务系统基地址
-    public static String url = "http://jwch.usts.edu.cn/";
+    public static String url = "http://jwb.asc.jx.cn/";
 
     //获取轮播图地址
     public static void get_banner_list(final get_bannerCall bannerCall) {
@@ -36,7 +36,7 @@ public class EducationBannerUtil {
             public void onResponse(Call call, Response response) throws IOException {
                 List<String> list = new ArrayList<String>();
                 Document document = Jsoup.parse(response.body().string());
-                Elements elements = document.select("div[class=slider]").select("div[class=bd]").select("li").select("img");
+                Elements elements = document.select("div[class=bd]").select("ul").select("li").select("a").select("img");
                 for (Element element : elements) {
                     list.add(url + element.attr("src"));
                 }

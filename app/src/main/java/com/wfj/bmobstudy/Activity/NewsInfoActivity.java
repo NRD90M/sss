@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.wfj.bmobstudy.Constant.UstsValue;
 import com.wfj.bmobstudy.R;
 import com.wfj.bmobstudy.Utils.NewsReset;
 import com.wfj.bmobstudy.Utils.Toast;
@@ -94,21 +95,21 @@ public class NewsInfoActivity extends AppBaseActivity {
 
         //  }
 
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
+//        mWebView.setWebChromeClient(new WebChromeClient() {
+//            @Override
+//            public void onProgressChanged(WebView view, int newProgress) {
+//                super.onProgressChanged(view, newProgress);
 
 //                if (url.startsWith("http://news")) {
-                    NewsReset.imgReset(mWebView);
-                    Log.e("tag", "news");
+//                    NewsReset.imgReset(mWebView);
+//                    Log.e("tag", "news");
 
 //                } else {
 //                    Log.e("tag", "notify");
 //                }
 
-            }
-        });
+//            }
+//        });
 
     }
 
@@ -118,25 +119,56 @@ public class NewsInfoActivity extends AppBaseActivity {
             @Override
             public void run() {
                 try {
-                    Document document = Jsoup.connect(url).timeout(6000).get();
-//                    int length = document.select("div[class=main_content]").size();
-//                    final String title = document.select("div[class=main_contit]").text();
-//                    String un_date = "";
-//                    if (length == 2) {
-//                        un_date = document.select("div[class=main_content]").text().split("信")[0];
-//                    } else {
-//                        un_date = document.select("div[class=main_content]").select("p").text();
-//                    }
-//                    final String date = un_date.substring(0, 20);
-//                    final String times = document.select("span[id=hits]").text();
-                    final Elements elements = document.select("div[class=main_content]");
-//                    if (url.contains("http://news.usts.edu.cn/")) {
+                    /*
+                    * 真想吐槽下，学校的新闻网址各式各样，真TT
+                    * */
+                    if (url.contains("https://mp.weixin.qq.com/")){//微信公众号
+                        Document document = Jsoup.connect(url).timeout(4000).get();
+                        Elements elements = document.select("div[id = js_article]");
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mWebView.loadDataWithBaseURL("http://tsg.asc.jx.cn/info/", elements.toString(), "text/html", "utf-8", null);
+                                mWebView.loadDataWithBaseURL("https://mp.weixin.qq.com/", elements.toString(), "text/html", "utf-8", null);
                             }
                         });
+                    } else if (url.contains("http://jy.jxedu.gov.cn/")) {//就业工作办公室
+                        Document document = Jsoup.connect(url).timeout(4000).get();
+                        Elements elements = document.select("div[class=news_con]");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWebView.loadDataWithBaseURL("http://jy.jxedu.gov.cn/", elements.toString(), "text/html", "utf-8", null);
+                            }
+                        });
+                    }else if (url.contains("http://ggzyweb.jiangxi.gov.cn/")) {//招标广告
+                        Document document = Jsoup.connect(url).timeout(4000).get();
+                        Elements elements = document.select("div[class=article-info]");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWebView.loadDataWithBaseURL("http://ggzyweb.jiangxi.gov.cn/", elements.toString(), "text/html", "utf-8", null);
+                            }
+                        });
+                    }else if (url.contains("https://article.xuexi.cn/")) {//学习
+                        Document document = Jsoup.connect(url).timeout(4000).get();
+                        Elements elements = document.select("div[class=xxqg-article-content]");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWebView.loadDataWithBaseURL("https://article.xuexi.cn/", elements.toString(), "text/html", "utf-8", null);
+                            }
+                        });
+                    }else{//普通新闻
+                        Document document = Jsoup.connect(UstsValue.official_jl + url).timeout(4000).get();
+                        Elements elements = document.select("div[class=contain_con]");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWebView.loadDataWithBaseURL("http://www.asc.jx.cn/", elements.toString(), "text/html", "utf-8", null);
+                            }
+                        });
+                    }
+
 //                    } else {
 //                        runOnUiThread(new Runnable() {
 //                            @Override

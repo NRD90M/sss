@@ -199,7 +199,7 @@ public class EntryCategoryActivity extends AppBaseActivity {
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction()
                 .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_left)
-                .replace(R.id.fl_content, fragment)
+                .replace(R.id.viewPager, fragment)
                 .addToBackStack("EntryFragment")
                 .commit();
     }

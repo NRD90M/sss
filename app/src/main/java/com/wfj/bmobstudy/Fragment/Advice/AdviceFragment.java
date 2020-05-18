@@ -21,7 +21,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
- * @description 描述一下方法的作用
+ * @description 反馈意见
  * @date: 2020/4/26
  * @author: a */
 public class AdviceFragment extends Fragment {

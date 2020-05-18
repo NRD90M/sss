@@ -139,8 +139,7 @@ public class SettingFragment extends Fragment {
                         "这里还可以快捷地查询一卡通的消费记录、课外学分、图书馆的书籍资料、办公电话等。\n" +
                         "\t\t\t\t实时浏览新闻、教务处的发文、公选课的介绍、学校年历、选课通知、对外考试等。\n" +
                         "\t\t\t\t包含多种知识频道，诸如奇闻、历史、常识、文学、教育、校园、实践、情感等等。\n" +
-                        "\t\t\t\t更有免下载券下载百度会员文档、自动选课的黑科技。\n" +
-                        "\t\t\t\t官网地址  http://sukeda.bmob.site/");
+                        "\t\t\t\t更有免下载券下载百度会员文档、自动选课的黑科技。\n");
                 startActivity(Intent.createChooser(intent, "分享到"));
             }
         });
@@ -206,6 +205,9 @@ public class SettingFragment extends Fragment {
                 .replace(content, fragment)
                 .addToBackStack(null)
                 .commit();
+        if (getActivity().findViewById(R.id.viewPager).getVisibility() == (View.VISIBLE)){
+            getActivity().findViewById(R.id.viewPager).setVisibility(View.GONE);
+        }
     }
 
     //学生身份验证
